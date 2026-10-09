@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Offline harness: compiles the plugin's pure logic files with NO Dalamud, no dev distrib and no game.
+    <Compile Include> rather than copies, so this can never drift from the shipped code.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>LogicTests</AssemblyName>
+    <RootNamespace>FrontlineAdvisor.LogicTests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Core\Teams.cs" />
+    <Compile Include="..\..\Core\MapCatalog.cs" />
+    <Compile Include="..\..\Core\Analysis.cs" />
+    <Compile Include="..\..\Core\Advisor.cs" />
+    <Compile Include="..\..\Core\Tracker.cs" />
+  </ItemGroup>
+
+</Project>

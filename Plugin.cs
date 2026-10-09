@@ -4,7 +4,6 @@ using Dalamud.Game.Command;
 using Dalamud.Game.Gui.Dtr;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Interface.Windowing;
-using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FrontlineAdvisor.Core;
@@ -19,8 +18,7 @@ public sealed class Plugin : IDalamudPlugin
     internal const string CommandName = "/fla";
     private const string DtrTitle = "Frontline Advisor";
 
-    [PluginService] internal static IDalamudPluginInterface PluginInterface { get; private set; } = null!;
-
+    private readonly IDalamudPluginInterface pluginInterface;
     private readonly ICommandManager commandManager;
     private readonly IClientState clientState;
     private readonly IFramework framework;
@@ -52,6 +50,7 @@ public sealed class Plugin : IDalamudPlugin
         IDtrBar dtrBar,
         IPluginLog log)
     {
+        this.pluginInterface = pluginInterface;
         this.commandManager = commandManager;
         this.clientState = clientState;
         this.framework = framework;
@@ -77,7 +76,6 @@ public sealed class Plugin : IDalamudPlugin
         pluginInterface.UiBuilder.Draw += windowSystem.Draw;
         pluginInterface.UiBuilder.OpenConfigUi += ToggleConfig;
         pluginInterface.UiBuilder.OpenMainUi += ToggleMain;
-
         framework.Update += OnFrameworkUpdate;
 
         UpdateDtrVisibility();
@@ -101,7 +99,7 @@ public sealed class Plugin : IDalamudPlugin
 
     internal GrandCompanyTeam? LocalTeam => configuration.ResolveLocalTeam();
 
-    internal void SaveConfiguration() => configuration.Save();
+    internal void SaveConfiguration() => pluginInterface.SavePluginConfig(configuration);
 
     internal void OpenConfig() => configWindow.IsOpen = true;
 
@@ -255,13 +253,13 @@ public sealed class Plugin : IDalamudPlugin
         {
             case "on":
                 configuration.Enabled = true;
-                configuration.Save();
+                SaveConfiguration();
                 MainInfo("Advisor notices ON.");
                 return;
 
             case "off":
                 configuration.Enabled = false;
-                configuration.Save();
+                SaveConfiguration();
                 MainInfo("Advisor notices OFF.");
                 return;
 
@@ -305,7 +303,7 @@ public sealed class Plugin : IDalamudPlugin
         if (string.Equals(value, "auto", StringComparison.OrdinalIgnoreCase))
         {
             configuration.LocalTeam = "auto";
-            configuration.Save();
+            SaveConfiguration();
             MainInfo("Your team set to auto (advice is phrased in absolute terms).");
             return;
         }
@@ -317,7 +315,7 @@ public sealed class Plugin : IDalamudPlugin
         }
 
         configuration.LocalTeam = team.Name();
-        configuration.Save();
+        SaveConfiguration();
         MainInfo($"Your team set to {team.Name()}.");
     }
 
@@ -326,7 +324,7 @@ public sealed class Plugin : IDalamudPlugin
         if (value.Length == 0 || string.Equals(value, "auto", StringComparison.OrdinalIgnoreCase))
         {
             configuration.MapOverride = "auto";
-            configuration.Save();
+            SaveConfiguration();
             MainInfo("Map detection set to auto.");
             return;
         }
@@ -339,7 +337,7 @@ public sealed class Plugin : IDalamudPlugin
         }
 
         configuration.MapOverride = map.Campaign;
-        configuration.Save();
+        SaveConfiguration();
         MainInfo($"Map forced to {map.Display} (win at {map.Target:N0}).");
     }
 
@@ -393,10 +391,9 @@ public sealed class Plugin : IDalamudPlugin
     {
         framework.Update -= OnFrameworkUpdate;
 
-        PluginInterface.UiBuilder.OpenMainUi -= ToggleMain;
-        PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfig;
-        PluginInterface.UiBuilder.Draw -= windowSystem.Draw;
-
+        pluginInterface.UiBuilder.OpenMainUi -= ToggleMain;
+        pluginInterface.UiBuilder.OpenConfigUi -= ToggleConfig;
+        pluginInterface.UiBuilder.Draw -= windowSystem.Draw;
         commandManager.RemoveHandler(CommandName);
 
         if (dtrEntry is not null)

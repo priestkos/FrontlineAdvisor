@@ -79,6 +79,4 @@ public sealed class Configuration : IPluginConfiguration
 
         MapOverride ??= "auto";
     }
-
-    public void Save() => Plugin.PluginInterface.SavePluginConfig(this);
 }

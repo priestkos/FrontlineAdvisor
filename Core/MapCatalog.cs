@@ -58,7 +58,10 @@ public static class MapCatalog
 
     public static FrontlineMap? ByDutyId(uint id) => Maps.FirstOrDefault(m => m.DutyId == id);
 
-    /// <summary>Fuzzy lookup by zone name, campaign name or "Zone (Campaign)".</summary>
+    /// <summary>
+    /// Lookup by duty id, exact campaign/zone/display, or a distinctive fragment.
+    /// Fragments shorter than 3 characters are rejected so "/fla map a" cannot bind the first entry.
+    /// </summary>
     public static FrontlineMap? ByName(string? text)
     {
         if (string.IsNullOrWhiteSpace(text)) return null;
@@ -67,6 +70,16 @@ public static class MapCatalog
         if (t.Equals("auto", StringComparison.OrdinalIgnoreCase)) return null;
 
         if (uint.TryParse(t, out var id)) return ByDutyId(id);
+
+        // Prefer exact matches on campaign, zone, or the full display string.
+        var exact = Maps.FirstOrDefault(m =>
+            m.Campaign.Equals(t, StringComparison.OrdinalIgnoreCase) ||
+            m.Zone.Equals(t, StringComparison.OrdinalIgnoreCase) ||
+            m.Display.Equals(t, StringComparison.OrdinalIgnoreCase));
+        if (exact is not null) return exact;
+
+        // Distinctive fragments only (e.g. "onsal", "chirteh", "naadam").
+        if (t.Length < 3) return null;
 
         return Maps.FirstOrDefault(m =>
             m.Zone.Contains(t, StringComparison.OrdinalIgnoreCase) ||

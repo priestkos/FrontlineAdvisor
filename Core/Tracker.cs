@@ -77,6 +77,12 @@ public sealed class MatchTracker
         startUtc = nowUtc;
     }
 
+    /// <summary>
+    /// Drops the published analysis without wiping history. Used when a live score read fails so the
+    /// UI cannot keep showing a board that is no longer trustworthy.
+    /// </summary>
+    public void ClearLatest() => Latest = null;
+
     /// <summary>Record one reading and return anything that should be announced.</summary>
     public List<Notice> Observe(ScoreSample sample, FrontlineMap? map, NotificationSettings settings)
     {
@@ -163,20 +169,25 @@ public sealed class MatchTracker
             }
         }
 
-        // --- Win imminent: someone is about to cross the threshold ---
+        // --- Win imminent: someone is about to cross (or just crossed) the threshold ---
         if (settings.AnnounceWinImminent && now.Map is not null)
         {
             foreach (var team in Teams.All)
             {
                 if (winImminentFired.Contains(team)) continue;
                 if (!now.ToWin.TryGetValue(team, out var remaining)) continue;
-                if (remaining <= 0 || remaining > settings.WinImminentMargin) continue;
+                // remaining == 0 means they hit/passed the target this poll (or earlier); still announce
+                // once so a single large score jump past the margin is not silent.
+                if (remaining > settings.WinImminentMargin) continue;
 
                 winImminentFired.Add(team);
+                var distance = remaining <= 0
+                    ? $"at the win ({now.Map.Target:N0} on {now.Map.Campaign})"
+                    : $"{remaining:N0} from the win ({now.Map.Target:N0} on {now.Map.Campaign})";
                 outp.Add(new Notice(
                     NoticeKind.WinImminent,
                     team,
-                    $"{team.Name()} is {remaining:N0} from the win ({now.Map.Target:N0} on {now.Map.Campaign}). Interrupt their objective now \u2014 one ranged hit breaks a channel.",
+                    $"{team.Name()} is {distance}. Interrupt their objective now \u2014 one ranged hit breaks a channel.",
                     Urgent: true));
             }
         }

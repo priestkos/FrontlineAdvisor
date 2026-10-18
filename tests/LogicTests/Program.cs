@@ -85,6 +85,9 @@ internal static class Program
             Equal(MapCatalog.ByName("Danshig Naadam")?.Target, 1400, "Naadam target is 1,400");
             Equal(MapCatalog.ByName("onsal")?.Campaign, "Danshig Naadam", "fuzzy match on zone fragment");
             Equal(MapCatalog.ByName("auto"), null, "auto is not a map");
+            Equal(MapCatalog.ByName("a"), null, "single-character fragment is rejected");
+            Equal(MapCatalog.ByName("se"), null, "two-character fragment is rejected");
+            Equal(MapCatalog.ByName("Secure")?.Campaign, "Secure", "exact campaign still matches");
 
             Check(MapCatalog.Maps.All(m => m.Note.Length > 40), "every map carries a playbook note");
         }
@@ -146,6 +149,12 @@ internal static class Program
             Equal(noMap.ToWin[GrandCompanyTeam.Maelstrom], -1, "no map means no target");
             Check(noMap.EtaWinMinutes[GrandCompanyTeam.Maelstrom] is null, "no map means no win ETA");
             Equal(noMap.FocusTarget, GrandCompanyTeam.Maelstrom, "focus falls back to the leader");
+
+            // Thin trailing window must not invent a rate from older history outside the window.
+            var oldRamp = Ramp(0, 60, 3, 100, 100, 100, 120, 0, 0);
+            var sparse = new List<ScoreSample>(oldRamp) { At(200, 220, 100, 100) };
+            var thin = Analyzer.SlopePerMinute(sparse, GrandCompanyTeam.Maelstrom, Base.AddSeconds(200), 30);
+            Equal(thin, 0.0, "slope is 0 when the trailing window has fewer than two samples");
         }
 
         internal static void AdvisorSection()
@@ -238,6 +247,24 @@ internal static class Program
             notices.AddRange(tracker5.Observe(At(25, 2300, 100, 50), map, settings)); // baseline
             notices.AddRange(tracker5.Observe(At(28, 2300, 100, 50), map, settings)); // now the checks run
             Check(notices.Any(n => n.Kind == NoticeKind.WinImminent && n.Team == GrandCompanyTeam.Maelstrom), "win-close fires inside the margin");
+
+            // Win imminent still fires when a poll jumps past the target (remaining == 0).
+            var tracker6 = new MatchTracker();
+            notices = new List<Notice>();
+            notices.AddRange(tracker6.Observe(At(0, 2000, 100, 50), map, settings));
+            notices.AddRange(tracker6.Observe(At(25, 2100, 100, 50), map, settings)); // baseline, still outside margin
+            notices.AddRange(tracker6.Observe(At(28, 2400, 100, 50), map, settings)); // jump to/over target
+            Check(notices.Any(n => n.Kind == NoticeKind.WinImminent && n.Team == GrandCompanyTeam.Maelstrom), "win-close fires when a jump hits the target");
+            Contains(notices.First(n => n.Kind == NoticeKind.WinImminent).Message, "at the win", "jump-to-target wording");
+
+            // ClearLatest drops the published board without wiping history.
+            var tracker7 = new MatchTracker();
+            tracker7.Observe(At(0, 10, 0, 0), map, settings);
+            tracker7.Observe(At(25, 20, 0, 0), map, settings);
+            Check(tracker7.Latest is not null, "tracker has a latest analysis before clear");
+            tracker7.ClearLatest();
+            Check(tracker7.Latest is null, "ClearLatest drops Latest");
+            Check(tracker7.SampleCount >= 2, "ClearLatest keeps history");
         }
 
         internal static void FullMatch()

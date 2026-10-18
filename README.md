@@ -68,7 +68,7 @@ no game — and plays whole matches through the analyzer, advisor and notificati
 
 ```
 cd tests/LogicTests && dotnet run -c Release
-# 66 checks, 0 failures
+# 75 checks, 0 failures
 ```
 
 ## Layout

@@ -151,7 +151,7 @@ public static class Analyzer
 
         var cutoff = nowUtc.AddSeconds(-windowSeconds);
         var pts = history.Where(s => s.TimeUtc >= cutoff).OrderBy(s => s.TimeUtc).ToList();
-        if (pts.Count < 2) pts = history.OrderBy(s => s.TimeUtc).ToList();
+        // Too few points inside the configured window: do not invent a rate from older history.
         if (pts.Count < 2) return 0.0;
 
         var baseTicks = pts[0].TimeUtc.Ticks;

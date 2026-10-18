@@ -2,11 +2,13 @@
 
 HTML mock sources for the Frontline Advisor windows, plus cropped PNGs used in the repo README and `preview.html`.
 
+Copy in the mid-match and lead-change mocks is taken from `Core` (`Analyzer` + `Advisor.Build` + `MatchTracker`) against sample Secure scores on the current master build — including the case where focus is the imminent winner rather than the scoreboard leader.
+
 | PNG | Source mock | Shows |
 |---|---|---|
 | `advisor_mid_match.png` | `mock-advisor.html` | Live board, focus, threat, posture, map note |
 | `advisor_idle.png` | `mock-idle.html` | Waiting for a Frontline match |
-| `advisor_settings.png` | `mock-settings.html` | Settings window |
+| `advisor_settings.png` | `mock-settings.html` | Settings window (defaults from `Configuration`) |
 | `advisor_lead_change.png` | `mock-notice.html` | Chat line + screen toast on lead change |
 
 Regenerate (needs Chrome):

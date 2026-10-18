@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Frontline Advisor — lead-change notice</title>
+<style>
+  :root{
+    --bg:#16171d; --text:#f0f2fa; --dim:#9aa2bd; --gold:#facc47;
+    --mael:#de4f45; --adder:#f0cc47; --flame:#579cf2; --threat:#f2a84d;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#0d0e12}
+  body{min-height:100vh;display:grid;place-items:center;
+       font-family:"Segoe UI",Roboto,system-ui,sans-serif;color:var(--text);padding:40px}
+  .stage{width:560px;display:flex;flex-direction:column;gap:18px}
+
+  .chat{
+    align-self:flex-start;width:320px;
+    background:rgba(12,14,20,.94);border:1px solid #2c3040;border-radius:6px;padding:10px 12px;
+    font-size:.8rem;line-height:1.45;box-shadow:0 12px 30px rgba(0,0,0,.4);
+  }
+  .chat .prefix{color:var(--gold);font-weight:700}
+  .chat .body{color:#dfe3f2;margin-top:2px}
+
+  .win{width:436px;align-self:center;background:var(--bg);border:1px solid #2c3040;border-radius:6px;
+       box-shadow:0 24px 60px rgba(0,0,0,.6);padding:12px}
+  .head{display:flex;justify-content:space-between;align-items:baseline}
+  .title{color:var(--gold);font-size:1.18rem;font-weight:600}
+  .toggle{color:var(--dim);font-size:.82rem}
+  .sub{color:var(--dim);font-size:.82rem;margin:8px 0 4px}
+  .headline{font-size:.95rem;line-height:1.35;margin-bottom:8px}
+  table{width:100%;border-collapse:collapse;font-size:.85rem}
+  th{color:var(--dim);text-align:left;font-weight:500;padding:4px 6px;border-bottom:1px solid #2c3040}
+  th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
+  td{padding:5px 6px;border-bottom:1px solid #20222e}
+  .mael{color:var(--mael)} .adder{color:var(--adder)} .flame{color:var(--flame)}
+  .dim{color:var(--dim)} .rise{color:var(--threat)}
+  .row-lead{background:rgba(250,204,71,.07)}
+  .panel{margin-top:10px}
+  .ptitle{font-size:.82rem;font-weight:700;letter-spacing:.04em;margin-bottom:3px;color:var(--gold)}
+  .pbody{font-size:.82rem;line-height:1.42;color:#dfe3f2}
+
+  .toast{
+    align-self:center;min-width:400px;max-width:460px;
+    background:rgba(18,20,28,.98);border:1px solid #3a4158;border-radius:8px;
+    box-shadow:0 18px 50px rgba(0,0,0,.55);padding:14px 16px;
+    display:flex;gap:12px;align-items:flex-start;
+  }
+  .star{color:var(--gold);font-size:1.2rem;line-height:1}
+  .tag{color:var(--gold);font-size:.78rem;font-weight:700;letter-spacing:.06em;margin-bottom:4px}
+  .msg{font-size:.92rem;line-height:1.4}
+</style>
+</head>
+<body>
+  <div class="stage" id="shot">
+    <div class="chat">
+      <div class="prefix">★ FRONTLINE LEAD CHANGE</div>
+      <div class="body">Twin Adder takes the lead on 1,252 — Maelstrom drops to 2nd (1,240).</div>
+    </div>
+
+    <div class="win">
+      <div class="head">
+        <div class="title">Frontline Advisor</div>
+        <div class="toggle">Notices: on</div>
+      </div>
+      <div class="sub">The Borderland Ruins (Secure) &middot; win at 2,400</div>
+      <div class="headline">Twin Adder leads on 1,252 &mdash; 12 ahead of Maelstrom (1,240).</div>
+      <table>
+        <thead>
+          <tr><th>Team</th><th class="num">Pts</th><th class="num">Gap</th><th class="num">/min</th><th>To win</th></tr>
+        </thead>
+        <tbody>
+          <tr class="row-lead"><td class="adder">&#9650; Twin Adder &middot; you</td><td class="num">1,252</td><td class="num dim">0</td><td class="num rise">+72</td><td class="dim">1,148 &nbsp;(~16m)</td></tr>
+          <tr><td class="mael">&nbsp;&nbsp;&nbsp;Maelstrom</td><td class="num">1,240</td><td class="num dim">12</td><td class="num dim">&ndash;</td><td class="dim">1,160 &nbsp;(~19m)</td></tr>
+          <tr><td class="flame">&nbsp;&nbsp;&nbsp;Immortal Flames</td><td class="num">905</td><td class="num dim">347</td><td class="num dim">&ndash;</td><td class="dim">1,495 &nbsp;(~&ndash;)</td></tr>
+        </tbody>
+      </table>
+      <div class="panel">
+        <div class="ptitle">FOCUS: Twin Adder</div>
+        <div class="pbody">You just took the lead. Defend your rate — do not chase kills into a 1v2. Keep Immortal Flames alive as a distraction while Maelstrom tries to claw back.</div>
+      </div>
+    </div>
+
+    <div class="toast">
+      <div class="star">★</div>
+      <div>
+        <div class="tag">[FRONTLINE] LEAD CHANGE</div>
+        <div class="msg">Twin Adder takes the lead on 1,252 — Maelstrom drops to 2nd (1,240).</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

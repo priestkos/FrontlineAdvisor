@@ -13,7 +13,7 @@ clock / the rate / the stalemate.*
 
 ## What it looks like
 
-Simulated screenshots of the advisor window (not captures from a live client). Open [`preview.html`](preview.html) for a gallery, or see the PNGs under [`docs/screenshots/`](docs/screenshots/).
+Simulated screenshots of the advisor window (not captures from a live client). Mid-match and lead-change copy is generated from `Core` against sample Secure scores on the current build. Open [`preview.html`](preview.html) for a gallery, or see the PNGs under [`docs/screenshots/`](docs/screenshots/).
 
 | Mid-match | Idle |
 |---|---|

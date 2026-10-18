@@ -11,6 +11,18 @@ All of the advice comes from the Frontline guide in `D:\FFXIV Frontline` (and it
 vault): *play the leader, not the scoreboard; deny their rate; never fight the team just below you; your enemy is the
 clock / the rate / the stalemate.*
 
+## What it looks like
+
+Simulated screenshots of the advisor window (not captures from a live client). Open [`preview.html`](preview.html) for a gallery, or see the PNGs under [`docs/screenshots/`](docs/screenshots/).
+
+| Mid-match | Idle |
+|---|---|
+| ![Advisor mid-match](docs/screenshots/advisor_mid_match.png) | ![Advisor idle](docs/screenshots/advisor_idle.png) |
+
+| Settings | Lead-change notice |
+|---|---|
+| ![Settings](docs/screenshots/advisor_settings.png) | ![Lead change](docs/screenshots/advisor_lead_change.png) |
+
 ## How it reads the game
 
 Frontline keeps its three team scores in the instance-content director, alongside the local player's Battle High.
@@ -81,7 +93,8 @@ cd tests/LogicTests && dotnet run -c Release
 | `Configuration.cs` | `IPluginConfiguration` |
 | `Windows/` | the advisor window and settings |
 | `Plugin.cs` | services, update loop, commands |
-| `preview.html` | window mockup |
+| `preview.html` | screenshot gallery |
+| `docs/screenshots/` | simulated PNGs + HTML mock sources |
 
 ## Caveat
 

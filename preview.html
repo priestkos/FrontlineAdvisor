@@ -2,95 +2,57 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Frontline Advisor — window mockup</title>
+<title>Frontline Advisor — window mockups</title>
 <style>
   :root{
-    --bg:#16171d; --panel:#1b1d26; --text:#f0f2fa; --dim:#9aa2bd; --gold:#facc47;
-    --mael:#de4f45; --adder:#f0cc47; --flame:#579cf2; --threat:#f2a84d;
+    --bg:#16171d; --text:#f0f2fa; --dim:#9aa2bd; --gold:#facc47;
   }
   *{box-sizing:border-box}
-  body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0d0e12;
-       font-family:"Segoe UI",Roboto,system-ui,sans-serif;color:var(--text)}
-  .win{width:436px;background:var(--bg);border:1px solid #2c3040;border-radius:6px;
-       box-shadow:0 24px 60px rgba(0,0,0,.6);padding:12px}
-  .head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
-  .title{color:var(--gold);font-size:1.18rem;font-weight:600}
-  .toggle{color:var(--dim);font-size:.82rem}
-  .sub{color:var(--dim);font-size:.82rem;margin:8px 0 4px}
-  .headline{font-size:.95rem;line-height:1.35;margin-bottom:10px}
-  table{width:100%;border-collapse:collapse;font-size:.85rem}
-  th{color:var(--dim);text-align:left;font-weight:500;padding:4px 6px;border-bottom:1px solid #2c3040}
-  td{padding:5px 6px;border-bottom:1px solid #20222e}
-  td.num{text-align:right;font-variant-numeric:tabular-nums}
-  .mael{color:var(--mael)} .adder{color:var(--adder)} .flame{color:var(--flame)}
-  .dim{color:var(--dim)} .rise{color:var(--threat)}
-  .row-lead{background:rgba(250,204,71,.07)}
-  .panel{margin-top:12px}
-  .ptitle{font-size:.82rem;font-weight:700;letter-spacing:.04em;margin-bottom:3px}
-  .pbody{font-size:.82rem;line-height:1.42;color:#dfe3f2}
-  .focus .ptitle{color:var(--gold)}
-  .threat .ptitle{color:var(--threat)}
-  .posture .ptitle{color:var(--text)}
-  .map .ptitle,.map .pbody{color:var(--dim)}
-  hr{border:0;border-top:1px solid #2c3040;margin:12px 0 8px}
-  .foot{display:flex;justify-content:space-between;color:var(--dim);font-size:.78rem}
-  .btns{display:flex;gap:6px;margin-top:10px}
-  .btn{flex:1;text-align:center;padding:6px;border-radius:4px;background:#23263199;border:1px solid #2c3040;
-       font-size:.82rem;color:var(--text)}
-  .btn.primary{background:var(--gold);color:#0e0f14;border-color:var(--gold);font-weight:600}
-  .note{position:fixed;bottom:14px;left:0;right:0;text-align:center;color:#5a6079;font-size:.72rem}
+  body{margin:0;min-height:100vh;background:#0d0e12;color:var(--text);
+       font-family:"Segoe UI",Roboto,system-ui,sans-serif;padding:32px 24px 48px}
+  h1{color:var(--gold);font-size:1.4rem;margin:0 0 6px}
+  .intro{color:var(--dim);font-size:.9rem;margin:0 0 28px;max-width:640px;line-height:1.45}
+  .grid{display:grid;gap:36px;max-width:1100px;margin:0 auto}
+  figure{margin:0}
+  figcaption{color:var(--dim);font-size:.82rem;margin:10px 0 0;line-height:1.4}
+  figcaption strong{color:var(--text);font-weight:600}
+  img{display:block;max-width:100%;height:auto;border-radius:8px;
+      box-shadow:0 18px 48px rgba(0,0,0,.45);border:1px solid #2c3040}
+  .note{margin-top:36px;color:#5a6079;font-size:.75rem;text-align:center}
+  a{color:var(--gold)}
 </style>
 </head>
 <body>
-  <div class="win">
-    <div class="head">
-      <div class="title">Frontline Advisor</div>
-      <div class="toggle">Notices: on</div>
+  <div class="grid">
+    <div>
+      <h1>Frontline Advisor — simulated screenshots</h1>
+      <p class="intro">
+        Mockups of the Dalamud windows and a lead-change notice. Sample scores only —
+        the live UI is drawn by the plugin. Sources live under
+        <a href="docs/screenshots/">docs/screenshots/</a>.
+      </p>
     </div>
 
-    <div class="sub">The Borderland Ruins (Secure) &middot; win at 2,400</div>
-    <div class="headline">Maelstrom leads on 1,240 &mdash; 60 ahead of Twin Adder (1,180).</div>
+    <figure>
+      <img src="docs/screenshots/advisor_mid_match.png" alt="Advisor window mid-match on Secure">
+      <figcaption><strong>Mid-match advisor</strong> — standings, focus, threat, posture and map note on Secure.</figcaption>
+    </figure>
 
-    <table>
-      <thead>
-        <tr><th>Team</th><th class="num">Pts</th><th class="num">Gap</th><th class="num">/min</th><th>To win</th></tr>
-      </thead>
-      <tbody>
-        <tr class="row-lead"><td class="mael">&#9650; Maelstrom</td><td class="num">1,240</td><td class="num dim">0</td><td class="num dim">&ndash;</td><td class="dim">1,160 &nbsp;(~19m)</td></tr>
-        <tr><td class="adder">&nbsp;&nbsp;&nbsp;Twin Adder &middot; you</td><td class="num">1,180</td><td class="num dim">60</td><td class="num rise">+72</td><td class="dim">1,220 &nbsp;(~17m)</td></tr>
-        <tr><td class="flame">&nbsp;&nbsp;&nbsp;Immortal Flames</td><td class="num">890</td><td class="num dim">350</td><td class="num dim">&ndash;</td><td class="dim">1,510 &nbsp;(~&ndash;)</td></tr>
-      </tbody>
-    </table>
+    <figure>
+      <img src="docs/screenshots/advisor_idle.png" alt="Advisor window while not in a match">
+      <figcaption><strong>Idle</strong> — waiting for a Frontline queue.</figcaption>
+    </figure>
 
-    <div class="panel focus">
-      <div class="ptitle">FOCUS: Maelstrom</div>
-      <div class="pbody">Your target is the leader: Maelstrom. Win by rating, not kills: deny their objectives, and pinch them only while they are already committed against the third company &mdash; never brawl them 1v2. You are 2nd: attack the leader's rate, and keep the third company alive as a distraction.</div>
-    </div>
+    <figure>
+      <img src="docs/screenshots/advisor_settings.png" alt="Settings window">
+      <figcaption><strong>Settings</strong> — announce toggles, delivery, team, map and tuning.</figcaption>
+    </figure>
 
-    <div class="panel threat">
-      <div class="ptitle">THREAT SOON: Twin Adder</div>
-      <div class="pbody">Twin Adder is scoring fastest (+72/min) and is the team to watch in the next few minutes. At this rate they overtake Maelstrom in about 50s &mdash; break their income now.</div>
-    </div>
-
-    <div class="panel posture">
-      <div class="ptitle">YOUR POSTURE</div>
-      <div class="pbody">You are 2nd. Your enemy is Maelstrom's rate: deny their objectives and pinch them while they fight the third company. Keep the 3rd alive &mdash; annihilating 1st for free just crowns 3rd.</div>
-    </div>
-
-    <div class="panel map">
-      <div class="ptitle">SECURE: THE NODE RING</div>
-      <div class="pbody">Hold 4+ nodes &mdash; the 3&rarr;4 breakpoint is 6 &rarr; 10 per tick. Nodes are worth +150. Collapse to the mid pillar on the weaponry timer and fight on the guardrailed ramps, never near the pad edges.</div>
-    </div>
-
-    <hr>
-    <div class="foot"><span>Reading every second &middot; last 0.4s ago</span><span>Battle High 60</span></div>
-
-    <div class="btns">
-      <div class="btn primary">Settings</div>
-      <div class="btn">Test notice</div>
-    </div>
+    <figure>
+      <img src="docs/screenshots/advisor_lead_change.png" alt="Lead-change chat line and screen toast">
+      <figcaption><strong>Lead-change notice</strong> — chat line plus screen toast when another company takes the lead.</figcaption>
+    </figure>
   </div>
-
-  <div class="note">Mockup only &mdash; sample scores. The live window is drawn by the plugin.</div>
+  <p class="note">Mockups only — not captures from a live client.</p>
 </body>
 </html>

@@ -99,7 +99,14 @@ public sealed class Plugin : IDalamudPlugin
 
     internal GrandCompanyTeam? LocalTeam => configuration.ResolveLocalTeam();
 
-    internal void SaveConfiguration() => pluginInterface.SavePluginConfig(configuration);
+    internal void SaveConfiguration()
+    {
+        pluginInterface.SavePluginConfig(configuration);
+        // ConfigWindow can flip ShowDtrBar; keep the server info bar entry in sync immediately.
+        UpdateDtrVisibility();
+        if (configuration.ShowDtrBar && InFrontline)
+            UpdateDtr();
+    }
 
     internal void OpenConfig() => configWindow.IsOpen = true;
 
@@ -135,6 +142,9 @@ public sealed class Plugin : IDalamudPlugin
 
             if (!snapshot.Ok)
             {
+                // Keep activeMap so we can resume when the director becomes readable again, but never
+                // present stale standings or a stale server-info-bar line as if they were live.
+                ClearStalePresentation();
                 WarnThrottled(snapshot.Note ?? "could not read the Frontline scores.");
                 return;
             }
@@ -170,11 +180,19 @@ public sealed class Plugin : IDalamudPlugin
             if (forced is not null) return forced;
         }
 
-        var byDuty = MapCatalog.ByDutyId(dutyId);
-        if (byDuty is not null) return byDuty;
+        // Duty / content-finder condition ids only. TerritoryType lives in a different ID space and
+        // must not be looked up against Frontline duty ids (false positives on other PvP content).
+        return MapCatalog.ByDutyId(dutyId);
+    }
 
-        // Some builds report the territory rather than the content row.
-        return MapCatalog.ByDutyId(clientState.TerritoryType);
+    /// <summary>
+    /// Drops the last good analysis and hides the DTR line so a failed read cannot look like a live board.
+    /// Does not call <see cref="EndMatch"/> — the map stays so a later good read resumes the same match.
+    /// </summary>
+    private void ClearStalePresentation()
+    {
+        tracker.ClearLatest();
+        if (dtrEntry is not null) dtrEntry.Shown = false;
     }
 
     private void StartMatch(DateTime now, FrontlineMap map)

@@ -86,6 +86,5 @@ Notifier.cs           chat line + toast
 Configuration.cs      IPluginConfiguration
 Windows/              window, settings
 Plugin.cs             services, update loop, commands
-preview.html          gallery
 tests/LogicTests/     offline harness
 ```

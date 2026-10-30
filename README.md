@@ -1,19 +1,21 @@
 # Frontline Advisor
 
-Reads the live Frontline score board and tells you three things, and tells you when to care:
+Reads the live Frontline scoreboard and says who is winning, who to focus, who is about to matter — and when the lead changes.
 
-- **Who has the most points right now** — the leader, the gap to second, and every team's points left to the win.
-- **Who to focus** — the team closest to actually winning, with the doctrine for hitting them.
-- **Who is about to be dangerous** — whoever is scoring fastest, with an estimated time to overtake the leader.
-- **A shout when the leader changes** — a chat line and a toast the moment a different Grand Company takes the lead.
+`/fla` · Dalamud API 15 · .NET 10
 
-All of the advice comes from the Frontline guide in `D:\FFXIV Frontline` (and its canonical copy in the Obsidian
-vault): *play the leader, not the scoreboard; deny their rate; never fight the team just below you; your enemy is the
-clock / the rate / the stalemate.*
+## What it does
 
-## What it looks like
+- **Standings** — leader, gap to second, points left.
+- **Focus** — the team closest to winning, and the doctrine for hitting them.
+- **Threat** — the fastest scorer, and when they overtake.
+- **Lead change** — chat line and toast when another company takes the lead.
 
-Simulated screenshots of the advisor window (not captures from a live client). Mid-match and lead-change copy is generated from `Core` against sample Secure scores on the current build. Open [`preview.html`](preview.html) for a gallery, or see the PNGs under [`docs/screenshots/`](docs/screenshots/).
+Doctrine: play the leader, not the scoreboard; deny their rate; never fight the team just below you; your enemy is the clock, the rate, the stalemate.
+
+## Screenshots
+
+Simulated mocks, not client captures, built from `Core` on sample Secure scores. Gallery: [`preview.html`](preview.html). Sources: [`docs/screenshots/`](docs/screenshots/).
 
 | Mid-match | Idle |
 |---|---|
@@ -23,10 +25,9 @@ Simulated screenshots of the advisor window (not captures from a live client). M
 |---|---|
 | ![Settings](docs/screenshots/advisor_settings.png) | ![Lead change](docs/screenshots/advisor_lead_change.png) |
 
-## How it reads the game
+## How it works
 
-Frontline keeps its three team scores in the instance-content director, alongside the local player's Battle High.
-The plugin reads them through `EventFramework.GetInstanceContentDirector()` and a small **read-only** overlay struct:
+Three scores live in the instance-content director, beside Battle High; read through `EventFramework.GetInstanceContentDirector()` and a **read-only** overlay struct:
 
 | Offset from the director | Field |
 |---|---|
@@ -35,68 +36,69 @@ The plugin reads them through `EventFramework.GetInstanceContentDirector()` and 
 | `+0x2512` | Immortal Flames score (short) |
 | `+0x33B7` | your Battle High (byte) |
 
-- **No hooks, no signatures, no writes.** Nothing is patched into the game; the plugin only reads.
-- The map is identified from the **content id** (`GameMain.CurrentContentFinderConditionId`) before any raw offset is
-  touched, so Crystalline Conflict and Rival Wings — which use a different director layout — are never read.
-- Every score is range-checked. If the offset ever goes stale after a PvP patch, the plugin shows *no reading*
-  instead of a wrong number, and says so in `/xllog`. `/fla dump` prints the live values so the offset can be
-  re-derived in one match.
-
-Motion is measured as a **least-squares slope over a trailing window** (default 90s), so one odd tick cannot invent a
-surge.
+- **No hooks, no signatures, no writes.**
+- Content id (`GameMain.CurrentContentFinderConditionId`) decides the map first, so Crystalline Conflict and Rival Wings — a different director layout — are never read.
+- Scores are range-checked: a stale offset shows *no reading*, not a wrong number, plus a `/xllog` line; `/fla dump` prints live values so it can be re-derived in one match.
+- Rate is a **least-squares slope over a trailing window** (90 s default), so one odd tick cannot fake a surge.
 
 ## Commands
 
-| Command | What it does |
-|---|---|
-| `/fla` | Toggle the advisor window. |
-| `/fla on` / `/fla off` | Master switch for the notifications. |
-| `/fla team mael\|adder\|flame\|auto` | Your Grand Company, for 1st/2nd/3rd posture wording. |
-| `/fla map <name\|auto>` | Force a map if detection is ever wrong. |
-| `/fla dump` | Print the live content id, director pointer and raw scores to chat and `/xllog`. |
+| Command | Effect |
+| --- | --- |
+| `/fla` | Toggle the window. |
+| `/fla on` / `/fla off` | Master notification switch. |
+| `/fla team mael\|adder\|flame\|auto` | Your Grand Company: 1st/2nd/3rd posture wording. |
+| `/fla map <name\|auto>` | Force a map if detection is wrong. |
+| `/fla dump` | Print live content id, director pointer and raw scores to chat and `/xllog`. |
 | `/fla test` | Fire a sample lead-change notice. |
 | `/fla config` | Open settings. |
 
 ## Settings
 
-- **Announce**: lead change (the explicit ask), first lead, emerging threat, win close.
-- **How**: chat line, screen toast, server info bar entry.
-- **Your team**: auto (absolute advice) or a specific Grand Company (sharper posture).
-- **Tuning**: rate window, start grace, surge threshold, win margin, and the two cooldowns.
+- **Announce** — lead change, first lead, emerging threat, win close.
+- **How** — chat line, screen toast, server info bar entry (the leader's score, shown only during a match).
+- **Your team** — auto (absolute advice) or a Grand Company (sharper posture); **Map** — auto or forced.
+- **Tuning** — rate window, start grace, surge threshold, win margin, the two cooldowns.
 
 ## Build
 
-Needs the .NET 10 SDK and the Dalamud dev distrib at `%AppData%\XIVLauncher\addon\Hooks\dev`.
+Requires the .NET 10 SDK and the Dalamud dev distribution (`%APPDATA%\XIVLauncher\addon\Hooks\dev`, or `DALAMUD_HOME`).
 
 ```
 dotnet build -c Debug      # load bin/Debug/FrontlineAdvisor.dll as a dev plugin
 dotnet build -c Release    # zip in bin/Release/FrontlineAdvisor/latest.zip
 ```
 
-## Offline tests
+## Install (dev plugin)
 
-`tests/LogicTests` compiles the pure logic files (`Core/*.cs`) from the plugin itself — no Dalamud, no dev distrib,
-no game — and plays whole matches through the analyzer, advisor and notification tracker:
+1. `/xlsettings` → Experimental → Dev Plugin Locations → add `bin\Debug\FrontlineAdvisor.dll`.
+2. `/xlplugins` → Dev Tools → enable **Frontline Advisor**.
+3. `/fla` opens the window; `/fla config` opens settings.
+
+## Tests
+
+`tests/LogicTests` compiles the pure `Core/*.cs` with no Dalamud, dev distribution or game, and plays whole matches through the analyzer, advisor and tracker. CI runs it on every push and PR.
 
 ```
 cd tests/LogicTests && dotnet run -c Release
-# 75 checks, 0 failures
+# 75 passed, 0 failed
 ```
+
+## Limits
+
+- Offsets and content ids are pinned to the patch 7.5-era build; a PvP patch can move them. `/fla dump` spots and fixes it; the plugin degrades to "no reading" rather than guessing.
+- The screenshots are simulated mocks: in-game rendering is not verified here.
 
 ## Layout
 
-| File | |
-|---|---|
-| `Core/` | teams, map catalog, analyzer, advisor text, notification tracker — no Dalamud types |
-| `FrontlineDirector.cs` | the read-only score overlay and the defensive reader |
-| `Notifier.cs` | chat line + toast emission |
-| `Configuration.cs` | `IPluginConfiguration` |
-| `Windows/` | the advisor window and settings |
-| `Plugin.cs` | services, update loop, commands |
-| `preview.html` | screenshot gallery |
-| `docs/screenshots/` | simulated PNGs + HTML mock sources |
-
-## Caveat
-
-The score offsets and the content ids are pinned to the current game build (patch 7.5 era). A major PvP patch can move
-them; `/fla dump` is the tool to spot and fix it, and the plugin degrades to "no reading" rather than guessing.
+```
+Core/                 analyzer, advisor, tracker, teams, maps
+FrontlineDirector.cs  read-only overlay, defensive reader
+Notifier.cs           chat line + toast
+Configuration.cs      IPluginConfiguration
+Windows/              window, settings
+Plugin.cs             services, update loop, commands
+preview.html          gallery
+docs/screenshots/     mocks + PNGs
+tests/LogicTests/     offline harness
+```

@@ -16,7 +16,7 @@
     <Name>FrontlineAdvisor</Name>
     <Punchline>Who is winning, who to hit, who is about to matter.</Punchline>
     <RepoUrl>https://github.com/priestkos/FrontlineAdvisor</RepoUrl>
-    <Tags>pvp;frontline;utility;ui;notification</Tags>
+    <Tags>pvp;frontline;notification</Tags>
   </PropertyGroup>
 
   <ItemGroup>

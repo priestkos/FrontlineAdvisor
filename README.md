@@ -13,18 +13,6 @@ Reads the live Frontline scoreboard and says who is winning, who to focus, who i
 
 Doctrine: play the leader, not the scoreboard; deny their rate; never fight the team just below you; your enemy is the clock, the rate, the stalemate.
 
-## Screenshots
-
-Simulated mocks, not client captures, built from `Core` on sample Secure scores. Gallery: [`preview.html`](preview.html). Sources: [`docs/screenshots/`](docs/screenshots/).
-
-| Mid-match | Idle |
-|---|---|
-| ![Advisor mid-match](docs/screenshots/advisor_mid_match.png) | ![Advisor idle](docs/screenshots/advisor_idle.png) |
-
-| Settings | Lead-change notice |
-|---|---|
-| ![Settings](docs/screenshots/advisor_settings.png) | ![Lead change](docs/screenshots/advisor_lead_change.png) |
-
 ## How it works
 
 Three scores live in the instance-content director, beside Battle High; read through `EventFramework.GetInstanceContentDirector()` and a **read-only** overlay struct:
@@ -87,7 +75,7 @@ cd tests/LogicTests && dotnet run -c Release
 ## Limits
 
 - Offsets and content ids are pinned to the patch 7.5-era build; a PvP patch can move them. `/fla dump` spots and fixes it; the plugin degrades to "no reading" rather than guessing.
-- The screenshots are simulated mocks: in-game rendering is not verified here.
+- Not verified in game: behaviour is taken from the code and the offline tests, not from a live client.
 
 ## Layout
 
@@ -99,6 +87,5 @@ Configuration.cs      IPluginConfiguration
 Windows/              window, settings
 Plugin.cs             services, update loop, commands
 preview.html          gallery
-docs/screenshots/     mocks + PNGs
 tests/LogicTests/     offline harness
 ```

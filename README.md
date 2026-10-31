@@ -27,6 +27,16 @@ Screenshots are mock-ups illustrating the UI, not captures from the live game.
 
 Regenerate PNGs from the HTML sources: `cd docs/screenshots/src && ./render.sh`.
 
+### Mock-up video
+
+The clip below is the same HTML mock-ups in sequence — **not** footage from the live game.
+
+![Mock-up walkthrough preview](docs/videos/mockup-walkthrough.gif)
+
+[Download mockup-walkthrough.mp4](docs/videos/mockup-walkthrough.mp4) (H.264, 1280×720)
+
+Regenerate: `cd docs/videos/src && ./render.sh`.
+
 ### Feature coverage
 
 | Feature | Screenshot |

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Frontline Advisor — mock-up walkthrough (not live game)</title>
+  <link rel="stylesheet" href="../../screenshots/src/imgui-mock.css" />
+  <link rel="stylesheet" href="walkthrough.css" />
+</head>
+<body>
+  <div id="stage">
+    <div id="scene-disclaimer" class="scene visible">
+      <div class="disclaimer-badge">UI mock-up</div>
+      <div class="disclaimer-title">Frontline Advisor</div>
+      <div class="disclaimer-sub">
+        These windows and overlays are HTML mock-ups for the README — not captures from the live game.
+      </div>
+    </div>
+
+    <div id="scene-active" class="scene scene-backdrop-plain">
+      <div class="scale-wrap">
+        <div class="imgui-window" id="win-active">
+          <div class="imgui-titlebar">Frontline Advisor</div>
+          <div class="imgui-body">
+            <div class="header-row">
+              <span class="title-lg">Frontline Advisor</span>
+              <span class="notices-label notices-on" id="active-notices">Notices: on</span>
+            </div>
+            <div class="spacer"></div>
+            <div class="dim">The Fields of Glory (Shatter) · win at 1,600</div>
+            <div class="spacer"></div>
+            <div class="main">Maelstrom leads on 1,240 — 60 ahead of Twin Adder (1,180).</div>
+            <div class="spacer"></div>
+            <table class="standings">
+              <thead>
+                <tr>
+                  <th>Team</th><th>Pts</th><th>Gap</th><th>/min</th><th>To win</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="team-mael">▲ Maelstrom · you</td>
+                  <td class="main">1,240</td>
+                  <td class="dim">0</td>
+                  <td class="threat">+42</td>
+                  <td class="dim">360 (~8m)</td>
+                </tr>
+                <tr>
+                  <td class="team-adder">&nbsp;&nbsp;Twin Adder</td>
+                  <td class="main">1,180</td>
+                  <td class="dim">60</td>
+                  <td class="threat">+55</td>
+                  <td class="dim">420 (~7m)</td>
+                </tr>
+                <tr>
+                  <td class="team-flame">&nbsp;&nbsp;Immortal Flames</td>
+                  <td class="main">890</td>
+                  <td class="dim">350</td>
+                  <td class="dim">+18</td>
+                  <td class="dim">710 (~39m)</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="panel-title accent">FOCUS: Maelstrom</div>
+            <div class="panel-body">Your target is the leader: Maelstrom. Win by rating, not kills: deny their objectives, and pinch them only while they are already committed against the third company — never brawl them 1v2. You are the leader: your enemy is the clock. Hold, stay unclumped and out of the open melee.</div>
+            <div class="panel-title threat">THREAT SOON: Twin Adder</div>
+            <div class="panel-body">Twin Adder is scoring fastest (+55/min) and is the team to watch in the next few minutes. At this rate they overtake Maelstrom in about 6m — break their income now.</div>
+            <div class="panel-title main">YOUR POSTURE</div>
+            <div class="panel-body">You lead. Your enemy is the clock: accumulate quietly, stay unclumped, take uncontested objectives and avoid the open melee — a visible runaway leader is a 2v1 waiting to happen.</div>
+            <div class="panel-title dim">SHATTER: THE DAMAGE RACE</div>
+            <div class="panel-body dim">Battle High converts straight into score here. Small ice always activates at 12:30 and 4:30 remaining. Never attack another company's large ice from the middle field - that lane invites the third team's pinch.</div>
+            <div class="separator"></div>
+            <div class="footer-meta">Reading every second · last 0.4s ago · Battle High 42</div>
+            <div class="btn-row">
+              <button type="button" class="btn" id="btn-settings">Settings</button>
+              <button type="button" class="btn btn-secondary" id="btn-test">Test notice</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="scene-idle" class="scene scene-backdrop-plain">
+      <div class="scale-wrap">
+        <div class="imgui-window">
+          <div class="imgui-titlebar">Frontline Advisor</div>
+          <div class="imgui-body">
+            <div class="header-row">
+              <span class="title-lg">Frontline Advisor</span>
+              <span class="notices-label notices-on">Notices: on</span>
+            </div>
+            <div class="spacer"></div>
+            <div class="main">Not in a Frontline match.</div>
+            <div class="spacer"></div>
+            <div class="dim">Queue for Frontline and the board fills in on its own. The scoreboard, the focus call and the lead-change notifications all start with the first reading.</div>
+            <div class="spacer"></div>
+            <div class="dim">Set your own Grand Company with /fla team mael | adder | flame for sharper 1st/2nd/3rd advice. If the board ever looks wrong, /fla dump prints what the plugin is reading.</div>
+            <div class="separator"></div>
+            <div class="footer-meta">Waiting for a match.</div>
+            <div class="btn-row">
+              <button type="button" class="btn">Settings</button>
+              <button type="button" class="btn btn-secondary">Test notice</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="scene-settings" class="scene scene-backdrop-plain settings-panel">
+      <div class="scale-wrap">
+        <div class="imgui-window" style="max-width: 440px;">
+          <div class="imgui-titlebar">Frontline Advisor — Settings</div>
+          <div class="imgui-body">
+            <label class="checkbox-row"><input type="checkbox" id="chk-enabled" checked /> Enabled</label>
+            <div class="spacer"></div>
+            <div class="section-title">Announce</div>
+            <label class="checkbox-row"><input type="checkbox" id="chk-lead" checked /> Lead change</label>
+            <label class="checkbox-row"><input type="checkbox" id="chk-first" checked /> First lead</label>
+            <label class="checkbox-row"><input type="checkbox" id="chk-threat" checked /> Emerging threat</label>
+            <label class="checkbox-row"><input type="checkbox" id="chk-winclose" checked /> Win close</label>
+            <div class="spacer"></div>
+            <div class="section-title">How</div>
+            <label class="checkbox-row"><input type="checkbox" checked /> Chat line</label>
+            <label class="checkbox-row"><input type="checkbox" checked /> Screen toast</label>
+            <label class="checkbox-row"><input type="checkbox" checked /> Server info bar</label>
+            <div class="spacer"></div>
+            <div class="section-title">Your team</div>
+            <div class="combo" id="combo-team">maelstrom</div>
+            <div class="section-title">Map</div>
+            <div class="combo" id="combo-map">auto</div>
+            <div class="spacer"></div>
+            <div class="section-title">Tuning</div>
+            <div class="slider-row">
+              <label>Rate window (s)</label>
+              <div class="slider-track">
+                <div class="slider-fill" id="rate-fill" style="width:28%"></div>
+                <div class="slider-thumb" id="rate-thumb" style="left:28%"></div>
+              </div>
+            </div>
+            <div class="slider-row">
+              <label>Surge rate /min</label>
+              <div class="slider-track">
+                <div class="slider-fill" style="width:17%"></div>
+                <div class="slider-thumb" style="left:17%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="scene-notify" class="scene scene-backdrop-scene">
+      <div class="scale-wrap-wide overlay-root">
+        <div class="dtr-bar">
+          <span class="dtr-entry">Example Character · Lv. 100</span>
+          <span class="dtr-entry highlight">FR: MAELSTROM 1,240</span>
+          <span class="dtr-entry">Frontline</span>
+        </div>
+        <div class="chat-log">
+          <div class="chat-line chat-system">[Frontline Advisor] dump: IsPvP=True territory=180 dutyId=180 timeMax=1200 ok=True scores=[1240/1180/890] map=The Fields of Glory (Shatter)</div>
+          <div class="chat-line"><span class="chat-tag">★ FRONTLINE LEAD CHANGE </span>Maelstrom takes the lead on 1,240 (60 clear of Twin Adder), up from Immortal Flames. New target: Maelstrom — deny their income, do not fight the team below you.</div>
+          <div class="chat-line"><span class="chat-tag">● FRONTLINE THREAT </span>Twin Adder is surging (+62/min) and is the danger in the next few minutes. They overtake Maelstrom in about 6m.</div>
+        </div>
+        <div class="toast toast-hidden" id="walkthrough-toast">[Frontline] Maelstrom takes the lead on 1,240 (60 clear of Twin Adder), up from Immortal Flames. New target: Maelstrom — deny their income, do not fight the team below you.</div>
+        <div class="floating-window">
+          <div class="imgui-window" style="min-width:380px;max-width:400px;font-size:13px;">
+            <div class="imgui-titlebar">Frontline Advisor</div>
+            <div class="imgui-body" style="padding:10px;">
+              <div class="header-row">
+                <span class="title-lg" style="font-size:15px;">Frontline Advisor</span>
+                <span class="notices-label notices-off" id="notify-notices">Notices: off</span>
+              </div>
+              <div class="spacer"></div>
+              <div class="dim" style="font-size:12px;">Master switch via /fla off — window still reads scores.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="scene-commands" class="scene scene-backdrop-plain">
+      <div class="scale-wrap">
+        <div class="imgui-window" style="max-width:680px;min-width:680px;">
+          <div class="imgui-titlebar">Frontline Advisor — /fla commands (chat)</div>
+          <div class="imgui-body">
+            <div class="title-lg">Slash commands</div>
+            <div class="spacer"></div>
+            <table class="cmd-table" id="cmd-table">
+              <thead><tr><th>Command</th><th>Example chat line</th></tr></thead>
+              <tbody>
+                <tr data-cmd="fla"><td><code>/fla</code></td><td class="dim">(toggles the advisor window)</td></tr>
+                <tr data-cmd="on"><td><code>/fla on</code></td><td>[Frontline Advisor] Advisor notices ON.</td></tr>
+                <tr data-cmd="off"><td><code>/fla off</code></td><td>[Frontline Advisor] Advisor notices OFF.</td></tr>
+                <tr data-cmd="team"><td><code>/fla team auto</code></td><td>[Frontline Advisor] Your team set to auto (advice is phrased in absolute terms).</td></tr>
+                <tr data-cmd="dump"><td><code>/fla dump</code></td><td>[Frontline Advisor] dump: IsPvP=… dutyId=… ok=… scores=[…] map=…</td></tr>
+                <tr data-cmd="test"><td><code>/fla test</code></td><td>[Frontline Advisor] Test notice fired (a sample lead change).</td></tr>
+                <tr data-cmd="config"><td><code>/fla config</code></td><td class="dim">(opens Frontline Advisor — Settings)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="caption-bar"><span class="feature-name" id="caption-text">UI mock-up — not from the live game</span></div>
+  </div>
+
+  <style>
+    .cmd-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+    .cmd-table th { text-align: left; color: var(--text-dim); padding: 6px 8px; border-bottom: 1px solid var(--win-border); }
+    .cmd-table td { padding: 8px; color: var(--text-main); vertical-align: top; }
+    .cmd-table tr:nth-child(even) td { background: var(--row-alt); }
+    code { color: var(--accent); font-family: Consolas, monospace; font-size: 12px; }
+  </style>
+
+  <script>
+    window.Walkthrough = (function () {
+      const scenes = {
+        disclaimer: document.getElementById("scene-disclaimer"),
+        active: document.getElementById("scene-active"),
+        idle: document.getElementById("scene-idle"),
+        settings: document.getElementById("scene-settings"),
+        notify: document.getElementById("scene-notify"),
+        commands: document.getElementById("scene-commands"),
+      };
+      const captionEl = document.getElementById("caption-text");
+
+      function showScene(name) {
+        Object.values(scenes).forEach((el) => el.classList.remove("visible"));
+        const el = scenes[name];
+        if (el) {
+          el.classList.add("visible");
+        }
+      }
+
+      function setCaption(text) {
+        captionEl.textContent = text;
+      }
+
+      function pressTestButton() {
+        document.getElementById("btn-test")?.classList.add("btn-pressed");
+      }
+
+      function unpressTestButton() {
+        document.getElementById("btn-test")?.classList.remove("btn-pressed");
+      }
+
+      function toggleWinClose() {
+        const el = document.getElementById("chk-winclose");
+        if (el) el.checked = !el.checked;
+      }
+
+      function bumpRateSlider() {
+        const fill = document.getElementById("rate-fill");
+        const thumb = document.getElementById("rate-thumb");
+        if (fill) fill.style.width = "42%";
+        if (thumb) thumb.style.left = "42%";
+      }
+
+      function openTeamCombo() {
+        document.getElementById("combo-team")?.classList.add("combo-open");
+      }
+
+      function showToast() {
+        document.getElementById("walkthrough-toast")?.classList.add("toast-visible");
+        document.getElementById("walkthrough-toast")?.classList.remove("toast-hidden");
+      }
+
+      function hideToast() {
+        const t = document.getElementById("walkthrough-toast");
+        t?.classList.remove("toast-visible");
+        t?.classList.add("toast-hidden");
+      }
+
+      function highlightCommand(cmd) {
+        document.querySelectorAll("#cmd-table tbody tr").forEach((row) => {
+          row.classList.toggle("highlight-row", row.dataset.cmd === cmd);
+        });
+      }
+
+      function resetInteractions() {
+        unpressTestButton();
+        const wc = document.getElementById("chk-winclose");
+        if (wc) wc.checked = true;
+        const fill = document.getElementById("rate-fill");
+        const thumb = document.getElementById("rate-thumb");
+        if (fill) fill.style.width = "28%";
+        if (thumb) thumb.style.left = "28%";
+        document.getElementById("combo-team")?.classList.remove("combo-open");
+        hideToast();
+        document.querySelectorAll("#cmd-table tbody tr").forEach((row) => row.classList.remove("highlight-row"));
+      }
+
+      return {
+        showScene,
+        setCaption,
+        pressTestButton,
+        unpressTestButton,
+        toggleWinClose,
+        bumpRateSlider,
+        openTeamCombo,
+        showToast,
+        hideToast,
+        highlightCommand,
+        resetInteractions,
+      };
+    })();
+  </script>
+</body>
+</html>

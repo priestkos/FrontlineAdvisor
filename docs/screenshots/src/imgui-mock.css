@@ -1,0 +1,379 @@
+/* Approximation of Dalamud ImGui dark theme (Frontline Advisor windows). */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.35;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px;
+}
+
+body.backdrop-scene {
+  background: linear-gradient(160deg, #1a2838 0%, #0d1218 45%, #162018 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+body.backdrop-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 80%, rgba(80, 120, 90, 0.25), transparent),
+    radial-gradient(circle at 20% 30%, rgba(100, 140, 180, 0.12), transparent 40%);
+  pointer-events: none;
+}
+
+body.backdrop-plain {
+  background: #12121a;
+}
+
+:root {
+  --accent: #fad947;
+  --text-main: #f2f5ff;
+  --text-dim: #9ea8c7;
+  --danger: #f27070;
+  --threat: #f2a84d;
+  --mael: #de4f45;
+  --adder: #f0cc47;
+  --flame: #579bf2;
+  --win-bg: rgba(15, 15, 23, 0.96);
+  --win-border: #3d3d52;
+  --title-bg: #252536;
+  --row-alt: rgba(255, 255, 255, 0.03);
+  --btn-bg: #fad947;
+  --btn-text: #0f0f17;
+  --checkbox-border: #6a6a82;
+  --slider-track: #2a2a3a;
+  --slider-fill: #6b5a2a;
+}
+
+.imgui-window {
+  position: relative;
+  z-index: 1;
+  background: var(--win-bg);
+  border: 1px solid var(--win-border);
+  border-radius: 4px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55);
+  min-width: 436px;
+  max-width: 480px;
+}
+
+.imgui-titlebar {
+  background: var(--title-bg);
+  padding: 6px 10px;
+  font-size: 13px;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--win-border);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.imgui-titlebar::before {
+  content: "▢";
+  color: var(--accent);
+  font-size: 11px;
+}
+
+.imgui-body {
+  padding: 12px;
+}
+
+.title-lg {
+  font-size: 16.5px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.notices-label {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.notices-off {
+  color: var(--danger);
+}
+
+.notices-on {
+  color: var(--text-dim);
+}
+
+.dim {
+  color: var(--text-dim);
+}
+
+.main {
+  color: var(--text-main);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.threat {
+  color: var(--threat);
+}
+
+.danger {
+  color: var(--danger);
+}
+
+.spacer {
+  height: 10px;
+}
+
+.panel-title {
+  font-weight: 600;
+  margin-top: 10px;
+  margin-bottom: 4px;
+}
+
+.panel-body {
+  color: var(--text-main);
+}
+
+table.standings {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+table.standings th {
+  color: var(--text-dim);
+  text-align: left;
+  font-weight: 400;
+  padding: 4px 6px 4px 0;
+  border-bottom: 1px solid var(--win-border);
+}
+
+table.standings td {
+  padding: 5px 6px 5px 0;
+}
+
+table.standings tr:nth-child(even) td {
+  background: var(--row-alt);
+}
+
+.team-mael {
+  color: var(--mael);
+}
+
+.team-adder {
+  color: var(--adder);
+}
+
+.team-flame {
+  color: var(--flame);
+}
+
+.separator {
+  height: 1px;
+  background: var(--win-border);
+  margin: 10px 0;
+}
+
+.footer-meta {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.btn-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.btn {
+  flex: 1;
+  padding: 7px 12px;
+  border: none;
+  border-radius: 3px;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: default;
+  text-align: center;
+}
+
+.btn-secondary {
+  background: #3a3a4e;
+  color: var(--text-main);
+}
+
+.section-title {
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+  color: var(--text-main);
+}
+
+.checkbox-row input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--checkbox-border);
+  border-radius: 2px;
+  background: #1a1a28;
+  position: relative;
+}
+
+.checkbox-row input:checked::after {
+  content: "✓";
+  position: absolute;
+  inset: -1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--accent);
+}
+
+.combo {
+  width: 100%;
+  padding: 6px 8px;
+  background: #1a1a28;
+  border: 1px solid var(--win-border);
+  border-radius: 3px;
+  color: var(--text-main);
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.combo::after {
+  content: "▾";
+  color: var(--text-dim);
+}
+
+.slider-row {
+  margin: 8px 0;
+}
+
+.slider-row label {
+  display: block;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.slider-track {
+  height: 6px;
+  background: var(--slider-track);
+  border-radius: 3px;
+  position: relative;
+}
+
+.slider-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--slider-fill), var(--accent));
+  border-radius: 3px;
+}
+
+.slider-thumb {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: #e8e8f0;
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Overlay scene: chat, toast, DTR */
+.overlay-root {
+  width: 1280px;
+  height: 720px;
+  position: relative;
+}
+
+.dtr-bar {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #e8e8ec;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  z-index: 5;
+}
+
+.dtr-entry {
+  padding: 2px 6px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 2px;
+}
+
+.dtr-entry.highlight {
+  color: var(--accent);
+}
+
+.chat-log {
+  position: absolute;
+  bottom: 120px;
+  left: 16px;
+  width: 520px;
+  font-size: 13px;
+  line-height: 1.45;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.chat-line {
+  margin-bottom: 4px;
+  color: #e0e4ee;
+}
+
+.chat-tag {
+  color: var(--accent);
+}
+
+.chat-system {
+  color: #a8b0c8;
+}
+
+.toast {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 640px;
+  padding: 12px 20px;
+  background: rgba(20, 20, 30, 0.92);
+  border: 1px solid #4a4a60;
+  border-radius: 4px;
+  color: var(--text-main);
+  font-size: 14px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+.floating-window {
+  position: absolute;
+  top: 80px;
+  right: 40px;
+}

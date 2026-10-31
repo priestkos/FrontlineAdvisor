@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Frontline Advisor — notifications mock-up</title>
+  <link rel="stylesheet" href="imgui-mock.css" />
+  <style>
+    html, body { margin: 0; padding: 0; width: 1280px; height: 720px; overflow: hidden; }
+    body.backdrop-scene { padding: 0; display: block; }
+  </style>
+</head>
+<body class="backdrop-scene">
+  <div class="overlay-root">
+    <div class="dtr-bar">
+      <span class="dtr-entry">Example Character · Lv. 100</span>
+      <span class="dtr-entry highlight" title="Maelstrom leads on 1,240 — 60 ahead of Twin Adder (1,180).">FR: MAELSTROM 1,240</span>
+      <span class="dtr-entry">Frontline</span>
+    </div>
+    <div class="chat-log">
+      <div class="chat-line chat-system">[Frontline Advisor] dump: IsPvP=True territory=180 dutyId=180 timeMax=1200 ok=True scores=[1240/1180/890] map=The Fields of Glory (Shatter)</div>
+      <div class="chat-line chat-system">[Frontline Advisor] Your team set to maelstrom.</div>
+      <div class="chat-line"><span class="chat-tag">★ FRONTLINE LEAD CHANGE </span>Maelstrom takes the lead on 1,240 (60 clear of Twin Adder), up from Immortal Flames. New target: Maelstrom — deny their income, do not fight the team below you.</div>
+      <div class="chat-line"><span class="chat-tag">● FRONTLINE FIRST LEAD </span>Maelstrom takes the first lead on 420. Focus Maelstrom — deny their objectives, and never chase them back to their platform.</div>
+      <div class="chat-line"><span class="chat-tag">● FRONTLINE THREAT </span>Twin Adder is surging (+62/min) and is the danger in the next few minutes. They overtake Maelstrom in about 6m.</div>
+      <div class="chat-line"><span class="chat-tag">★ FRONTLINE WIN CLOSE </span>Maelstrom is 140 from the win (1,600 on Shatter). Interrupt their objective now — one ranged hit breaks a channel.</div>
+    </div>
+    <div class="toast">[Frontline] Maelstrom takes the lead on 1,240 (60 clear of Twin Adder), up from Immortal Flames. New target: Maelstrom — deny their income, do not fight the team below you.</div>
+    <div class="floating-window">
+      <div class="imgui-window" style="min-width:380px;max-width:400px;font-size:13px;">
+        <div class="imgui-titlebar">Frontline Advisor</div>
+        <div class="imgui-body" style="padding:10px;">
+          <div class="header-row">
+            <span class="title-lg" style="font-size:15px;">Frontline Advisor</span>
+            <span class="notices-label notices-off">Notices: off</span>
+          </div>
+          <div class="spacer"></div>
+          <div class="dim" style="font-size:12px;">Master switch via /fla off — window still reads scores.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

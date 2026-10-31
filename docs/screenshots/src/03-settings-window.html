@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Frontline Advisor — Settings mock-up</title>
+  <link rel="stylesheet" href="imgui-mock.css" />
+  <style>.imgui-window { max-width: 440px; }</style>
+</head>
+<body class="backdrop-plain">
+  <div class="imgui-window">
+    <div class="imgui-titlebar">Frontline Advisor — Settings</div>
+    <div class="imgui-body">
+      <label class="checkbox-row"><input type="checkbox" checked /> Enabled</label>
+      <div class="spacer"></div>
+      <div class="section-title">Announce</div>
+      <label class="checkbox-row"><input type="checkbox" checked /> Lead change</label>
+      <label class="checkbox-row"><input type="checkbox" checked /> First lead</label>
+      <label class="checkbox-row"><input type="checkbox" checked /> Emerging threat</label>
+      <label class="checkbox-row"><input type="checkbox" checked /> Win close</label>
+      <div class="spacer"></div>
+      <div class="section-title">How</div>
+      <label class="checkbox-row"><input type="checkbox" checked /> Chat line</label>
+      <label class="checkbox-row"><input type="checkbox" checked /> Screen toast</label>
+      <label class="checkbox-row"><input type="checkbox" checked /> Server info bar</label>
+      <div class="spacer"></div>
+      <div class="section-title">Your team</div>
+      <div class="combo">maelstrom</div>
+      <div class="dim" style="font-size:12px;margin-bottom:8px;">Pick your Grand Company for 1st/2nd/3rd posture wording. Auto keeps the advice absolute.</div>
+      <div class="section-title">Map</div>
+      <div class="combo">auto</div>
+      <div class="dim" style="font-size:12px;">Auto follows the live content id. Force one only if detection is wrong.</div>
+      <div class="spacer"></div>
+      <div class="section-title">Tuning</div>
+      <div class="slider-row">
+        <label>Rate window (s)</label>
+        <div class="slider-track"><div class="slider-fill" style="width:28%"></div><div class="slider-thumb" style="left:28%"></div></div>
+      </div>
+      <div class="slider-row">
+        <label>Start grace (s)</label>
+        <div class="slider-track"><div class="slider-fill" style="width:22%"></div><div class="slider-thumb" style="left:22%"></div></div>
+      </div>
+      <div class="slider-row">
+        <label>Surge rate /min</label>
+        <div class="slider-track"><div class="slider-fill" style="width:17%"></div><div class="slider-thumb" style="left:17%"></div></div>
+      </div>
+      <div class="slider-row">
+        <label>Win margin</label>
+        <div class="slider-track"><div class="slider-fill" style="width:21%"></div><div class="slider-thumb" style="left:21%"></div></div>
+      </div>
+      <div class="slider-row">
+        <label>Lead cooldown (s)</label>
+        <div class="slider-track"><div class="slider-fill" style="width:17%"></div><div class="slider-thumb" style="left:17%"></div></div>
+      </div>
+      <div class="slider-row">
+        <label>Threat cooldown (s)</label>
+        <div class="slider-track"><div class="slider-fill" style="width:17%"></div><div class="slider-thumb" style="left:17%"></div></div>
+      </div>
+      <div class="separator"></div>
+      <div class="dim" style="font-size:12px;">/fla on | off | team | map | dump | test. Frontline Advisor reads the game's own score board; it hooks nothing and writes nothing back.</div>
+    </div>
+  </div>
+</body>
+</html>

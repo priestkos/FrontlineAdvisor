@@ -1,0 +1,11 @@
+{
+  "name": "frontline-advisor-screenshots",
+  "private": true,
+  "description": "Regenerate README mock-up PNGs from HTML sources",
+  "scripts": {
+    "render": "node render.cjs"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^22.0.0"
+  }
+}

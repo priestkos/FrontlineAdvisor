@@ -1,0 +1,11 @@
+{
+  "name": "frontline-advisor-walkthrough-video",
+  "private": true,
+  "description": "Regenerate README mock-up walkthrough MP4/GIF from HTML",
+  "scripts": {
+    "render": "node render-video.cjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.49.0"
+  }
+}

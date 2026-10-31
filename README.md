@@ -1,5 +1,7 @@
 # Frontline Advisor
 
+<img src="images/icon.png" width="96">
+
 Reads the live Frontline scoreboard and says who is winning, who to focus, who is about to matter — and when the lead changes.
 
 `/fla` · Dalamud API 15 · .NET 10

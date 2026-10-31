@@ -15,29 +15,6 @@ const TMP = path.join(ROOT, ".render-tmp");
 const VIEWPORT = { width: 1280, height: 720 };
 const CHROME = "/usr/local/bin/google-chrome";
 
-/** Fixed timeline (ms from start). Same on every run. */
-const TIMELINE = [
-  { at: 0, scene: "disclaimer", caption: "UI mock-up — not from the live game", fn: "resetInteractions" },
-  { at: 3500, scene: "active", caption: "Main window (in match) — standings, FOCUS, THREAT, posture" },
-  { at: 6500, fn: "pressTestButton", caption: "/fla test — sample lead-change notice" },
-  { at: 9000, fn: "unpressTestButton", scene: "active", caption: "Map playbook note · poll footer · Settings" },
-  { at: 11500, scene: "idle", caption: "Main window (idle) — waiting for a Frontline match" },
-  { at: 14500, scene: "settings", caption: "Settings (/fla config) — Enabled, Announce, How" },
-  { at: 17000, fn: "toggleWinClose", caption: "Announce: toggle Win close" },
-  { at: 19000, fn: "bumpRateSlider", caption: "Tuning: rate window slider" },
-  { at: 21000, fn: "openTeamCombo", caption: "Your team combo (Grand Company)" },
-  { at: 23500, scene: "notify", caption: "Notifications — chat lines, server info bar (FR: …)" },
-  { at: 25500, fn: "showToast", caption: "Screen toast on lead change" },
-  { at: 28500, scene: "notify", caption: "/fla off — notices off; window still reads scores" },
-  { at: 31000, scene: "commands", caption: "Slash commands — /fla on · off · team · dump · test · config" },
-  { at: 33000, fn: "highlightCommand", arg: "dump", caption: "/fla dump — live scores to chat and /xllog" },
-  { at: 35000, fn: "highlightCommand", arg: "test", caption: "/fla test" },
-  { at: 37000, fn: "highlightCommand", arg: "config", caption: "/fla config opens Settings" },
-  { at: 39000, scene: "disclaimer", caption: "UI mock-up — not from the live game", fn: "resetInteractions" },
-];
-
-const TOTAL_MS = 42000;
-
 function runFfmpeg(args) {
   execFileSync("ffmpeg", ["-y", ...args], { stdio: "inherit" });
 }
@@ -46,23 +23,102 @@ async function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-async function applyStep(page, step) {
-  if (step.scene) {
-    await page.evaluate((s) => window.Walkthrough.showScene(s), step.scene);
-  }
-  if (step.caption) {
-    await page.evaluate((c) => window.Walkthrough.setCaption(c), step.caption);
-  }
-  if (step.fn) {
-    await page.evaluate(
-      ({ fn, arg }) => {
-        const w = window.Walkthrough;
-        if (arg !== undefined) w[fn](arg);
-        else w[fn]();
-      },
-      { fn: step.fn, arg: step.arg }
-    );
-  }
+async function callWalkthrough(page, method, ...args) {
+  await page.evaluate(
+    async ({ method, args }) => {
+      const w = window.Walkthrough;
+      const fn = w[method];
+      if (typeof fn !== "function") throw new Error(`Walkthrough.${method} missing`);
+      await fn(...args);
+    },
+    { method, args }
+  );
+}
+
+async function setCaption(page, text, fade = false) {
+  await page.evaluate(
+    async ({ text, fade }) => {
+      if (fade) await window.Walkthrough.setCaptionFade(text);
+      else window.Walkthrough.setCaption(text);
+    },
+    { text, fade }
+  );
+}
+
+/** Fixed sequence — same on every run. Durations include cursor travel and transitions. */
+async function runTimeline(page) {
+  await page.evaluate(() => {
+    window.Walkthrough.showSceneInstant("disclaimer");
+    window.Walkthrough.resetInteractions();
+    window.Walkthrough.setCaption("UI mock-up — not from the live game");
+  });
+  await sleep(3400);
+
+  await setCaption(page, "Main window (in match) — standings, FOCUS, THREAT, posture", true);
+  await callWalkthrough(page, "showScene", "active");
+  await sleep(2200);
+
+  await setCaption(page, "/fla test — sample lead-change notice", true);
+  await callWalkthrough(page, "clickTestNotice");
+  await callWalkthrough(page, "releaseTestNotice");
+  await sleep(800);
+
+  await setCaption(page, "Map playbook note · poll footer · Settings", true);
+  await sleep(1400);
+  await callWalkthrough(page, "clickSettingsFromActive");
+  await sleep(400);
+
+  await setCaption(page, "Main window (idle) — waiting for a Frontline match", true);
+  await callWalkthrough(page, "showScene", "idle");
+  await sleep(2600);
+
+  await setCaption(page, "Settings (/fla config) — Enabled, Announce, How", true);
+  await callWalkthrough(page, "showScene", "settings");
+  await sleep(2000);
+
+  await setCaption(page, "Announce: toggle Win close", true);
+  await callWalkthrough(page, "clickWinCloseCheckbox");
+  await sleep(500);
+
+  await setCaption(page, "Tuning: rate window slider", true);
+  await callWalkthrough(page, "clickRateSlider");
+  await sleep(400);
+
+  await setCaption(page, "Your team combo (Grand Company)", true);
+  await callWalkthrough(page, "clickTeamCombo");
+  await sleep(600);
+
+  await setCaption(page, "Notifications — chat lines, server info bar (FR: …)", true);
+  await callWalkthrough(page, "showScene", "notify");
+  await sleep(2200);
+
+  await setCaption(page, "Screen toast on lead change", true);
+  await callWalkthrough(page, "revealToast");
+  await sleep(1200);
+
+  await setCaption(page, "/fla off — notices off; window still reads scores", true);
+  await sleep(2400);
+
+  await setCaption(page, "Slash commands — /fla on · off · team · dump · test · config", true);
+  await callWalkthrough(page, "showScene", "commands");
+  await sleep(1800);
+
+  await setCaption(page, "/fla dump — live scores to chat and /xllog", true);
+  await callWalkthrough(page, "clickCommandRow", "dump");
+  await sleep(300);
+
+  await setCaption(page, "/fla test", true);
+  await callWalkthrough(page, "clickCommandRow", "test");
+  await sleep(300);
+
+  await setCaption(page, "/fla config opens Settings", true);
+  await callWalkthrough(page, "clickCommandRow", "config");
+  await sleep(400);
+
+  await setCaption(page, "UI mock-up — not from the live game", true);
+  await callWalkthrough(page, "showScene", "disclaimer");
+  await page.evaluate(() => window.Walkthrough.resetInteractions());
+  await sleep(2800);
 }
 
 (async () => {
@@ -83,15 +139,7 @@ async function applyStep(page, step) {
   await page.goto(`file://${HTML}`, { waitUntil: "networkidle", timeout: 30000 });
   await page.waitForFunction(() => typeof window.Walkthrough !== "undefined");
 
-  let cursor = 0;
-  for (const step of TIMELINE) {
-    const wait = step.at - cursor;
-    if (wait > 0) await sleep(wait);
-    cursor = step.at;
-    await applyStep(page, step);
-  }
-  const tail = TOTAL_MS - cursor;
-  if (tail > 0) await sleep(tail);
+  await runTimeline(page);
 
   const video = page.video();
   await page.close();
@@ -123,7 +171,7 @@ async function applyStep(page, step) {
     "-i",
     mp4Path,
     "-vf",
-    "fps=6,scale=800:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=128:stats_mode=diff[p];[s1][p]paletteuse=dither=bayer:bayer_scale=5",
+    "fps=5,scale=720:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=96:stats_mode=diff[p];[s1][p]paletteuse=dither=bayer:bayer_scale=4",
     "-loop",
     "0",
     gifPath,

@@ -25,8 +25,6 @@ Screenshots are mock-ups illustrating the UI, not captures from the live game.
 | ![Notifications overlay](docs/screenshots/04-notifications-overlay.png) | **Notifications** — chat lines (FRONTLINE tags), screen toast, server info bar (`FR: …`), plus `/fla dump` output and notices off. |
 | ![Slash commands](docs/screenshots/05-commands-help.png) | **Slash commands** — `/fla`, `on`/`off`, `team`, `map`, `dump`, `test`, and `config` chat responses. |
 
-Regenerate PNGs from the HTML sources: `cd docs/screenshots/src && ./render.sh`.
-
 ### Mock-up video
 
 The clip below is the same HTML mock-ups in sequence — **not** footage from the live game.
@@ -34,8 +32,6 @@ The clip below is the same HTML mock-ups in sequence — **not** footage from th
 ![Mock-up walkthrough preview](docs/videos/mockup-walkthrough.gif)
 
 [Download mockup-walkthrough.mp4](docs/videos/mockup-walkthrough.mp4) (H.264, 1280×720)
-
-Regenerate: `cd docs/videos/src && ./render.sh`.
 
 ### Feature coverage
 

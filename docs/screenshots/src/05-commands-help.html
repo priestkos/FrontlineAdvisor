@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Frontline Advisor — slash commands mock-up</title>
+  <link rel="stylesheet" href="imgui-mock.css" />
+  <style>
+    html, body { width: 720px; min-height: 480px; }
+    .cmd-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+    .cmd-table th { text-align: left; color: var(--text-dim); padding: 6px 8px; border-bottom: 1px solid var(--win-border); }
+    .cmd-table td { padding: 8px; color: var(--text-main); vertical-align: top; }
+    .cmd-table tr:nth-child(even) td { background: var(--row-alt); }
+    code { color: var(--accent); font-family: Consolas, monospace; font-size: 12px; }
+  </style>
+</head>
+<body class="backdrop-plain">
+  <div class="imgui-window" style="max-width:680px;min-width:680px;">
+    <div class="imgui-titlebar">Frontline Advisor — /fla commands (chat)</div>
+    <div class="imgui-body">
+      <div class="title-lg">Slash commands</div>
+      <div class="spacer"></div>
+      <div class="dim">Responses appear as [Frontline Advisor] in chat (and dump details also go to /xllog).</div>
+      <table class="cmd-table">
+        <thead><tr><th>Command</th><th>Example chat line</th></tr></thead>
+        <tbody>
+          <tr><td><code>/fla</code></td><td class="dim">(toggles the advisor window)</td></tr>
+          <tr><td><code>/fla on</code></td><td class="chat-system" style="color:var(--text-main)">[Frontline Advisor] Advisor notices ON.</td></tr>
+          <tr><td><code>/fla off</code></td><td>[Frontline Advisor] Advisor notices OFF.</td></tr>
+          <tr><td><code>/fla team auto</code></td><td>[Frontline Advisor] Your team set to auto (advice is phrased in absolute terms).</td></tr>
+          <tr><td><code>/fla map Shatter</code></td><td>[Frontline Advisor] Map forced to The Fields of Glory (Shatter) (win at 1,600).</td></tr>
+          <tr><td><code>/fla dump</code></td><td>[Frontline Advisor] dump: IsPvP=… dutyId=… ok=… scores=[…] map=…</td></tr>
+          <tr><td><code>/fla test</code></td><td>[Frontline Advisor] Test notice fired (a sample lead change).</td></tr>
+          <tr><td><code>/fla config</code></td><td class="dim">(opens Frontline Advisor — Settings)</td></tr>
+        </tbody>
+      </table>
+      <div class="spacer"></div>
+      <div class="dim" style="font-size:12px;">Aliases: <code>/fla team me</code>, <code>/fla cfg</code>, <code>/fla settings</code>. Unknown verbs print the help line from the handler.</div>
+    </div>
+  </div>
+</body>
+</html>

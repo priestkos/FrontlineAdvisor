@@ -13,6 +13,50 @@ Reads the live Frontline scoreboard and says who is winning, who to focus, who i
 
 Doctrine: play the leader, not the scoreboard; deny their rate; never fight the team just below you; your enemy is the clock, the rate, the stalemate.
 
+## Screenshots
+
+Screenshots are mock-ups illustrating the UI, not captures from the live game.
+
+| | |
+| --- | --- |
+| ![Main window during a match](docs/screenshots/01-main-window-active.png) | **Main window (in match)** — standings table, headline, FOCUS / THREAT / YOUR POSTURE, map playbook note, poll footer, Settings and Test notice. |
+| ![Main window idle](docs/screenshots/02-main-window-idle.png) | **Main window (idle)** — “Not in a Frontline match” help text and the same footer actions. |
+| ![Settings window](docs/screenshots/03-settings-window.png) | **Settings** (`/fla config`) — Enabled, Announce, How, Your team, Map, and Tuning sliders. |
+| ![Notifications overlay](docs/screenshots/04-notifications-overlay.png) | **Notifications** — chat lines (FRONTLINE tags), screen toast, server info bar (`FR: …`), plus `/fla dump` output and notices off. |
+| ![Slash commands](docs/screenshots/05-commands-help.png) | **Slash commands** — `/fla`, `on`/`off`, `team`, `map`, `dump`, `test`, and `config` chat responses. |
+
+Regenerate PNGs from the HTML sources: `cd docs/screenshots/src && ./render.sh`.
+
+### Feature coverage
+
+| Feature | Screenshot |
+| --- | --- |
+| Main advisor window (`/fla`, Dalamud “Open Main UI”) | 01, 02 |
+| Standings (Team, Pts, Gap, /min, To win) + leader marker | 01 |
+| Headline, map line (`win at …`) | 01 |
+| FOCUS panel | 01 |
+| THREAT SOON panel | 01 |
+| YOUR POSTURE (when your team is set) | 01 |
+| Map playbook note (per-campaign heading + body) | 01 |
+| Notices on/off indicator in window header | 01, 04 |
+| Footer: poll age, Battle High; Settings; Test notice | 01, 02 |
+| Idle / waiting-for-match state | 02 |
+| Settings window (`/fla config` / `cfg` / `settings`, Settings button) | 03 |
+| Enabled master switch | 03 |
+| Announce: Lead change, First lead, Emerging threat, Win close | 03 |
+| How: Chat line, Screen toast, Server info bar | 03, 04 |
+| Your team combo (`auto`, Grand Companies) | 03 |
+| Map combo (`auto`, Secure, Seize, Shatter, Danshig Naadam, Triumph) | 03 |
+| Tuning: rate window, start grace, surge rate, win margin, lead/threat cooldowns | 03 |
+| Chat notices (LEAD CHANGE, FIRST LEAD, THREAT, WIN CLOSE) | 04 |
+| Screen toast | 04 |
+| Server info bar entry (`FR: …`, click opens main window) | 04 |
+| `/fla on` / `/fla off` (master notices) | 04, 05 |
+| `/fla team` (`mael` \| `adder` \| `flame` \| `auto`, alias `me`) | 04, 05 |
+| `/fla map` (`<name>` \| `auto`) | 05 |
+| `/fla dump` (chat + `/xllog`) | 04, 05 |
+| `/fla test` (sample lead-change notice) | 01, 05 |
+
 ## How it works
 
 Three scores live in the instance-content director, beside Battle High; read through `EventFramework.GetInstanceContentDirector()` and a **read-only** overlay struct:

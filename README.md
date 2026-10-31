@@ -35,8 +35,6 @@ The clip below is the same HTML mock-ups in sequence — **not** footage from th
 
 [Download mockup-walkthrough.mp4](docs/videos/mockup-walkthrough.mp4) (H.264, 1280×720)
 
-Regenerate: `cd docs/videos/src && ./render.sh`.
-
 ### Feature coverage
 
 | Feature | Screenshot |

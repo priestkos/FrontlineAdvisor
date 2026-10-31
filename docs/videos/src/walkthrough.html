@@ -202,6 +202,15 @@
     </div>
 
     <div id="caption-bar"><span class="feature-name" id="caption-text">UI mock-up — not from the live game</span></div>
+
+    <div id="cursor-layer" aria-hidden="true">
+      <div id="cursor-ripple"></div>
+      <div id="cursor-pointer">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 3L5 19L9.5 14.5L13 21L15.5 20L12 13.5L18 13.5L5 3Z" fill="#f2f5ff" stroke="#0a0a12" stroke-width="1.2" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
   </div>
 
   <style>
@@ -223,17 +232,104 @@
         commands: document.getElementById("scene-commands"),
       };
       const captionEl = document.getElementById("caption-text");
+      const cursorEl = document.getElementById("cursor-pointer");
+      const rippleEl = document.getElementById("cursor-ripple");
+      let cursorX = 640;
+      let cursorY = 380;
+      let currentSceneName = "disclaimer";
 
-      function showScene(name) {
+      function easeInOutCubic(t) {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      }
+
+      function sleep(ms) {
+        return new Promise((r) => setTimeout(r, ms));
+      }
+
+      function setCursorPos(x, y) {
+        cursorX = x;
+        cursorY = y;
+        cursorEl.style.setProperty("--cx", `${x}px`);
+        cursorEl.style.setProperty("--cy", `${y}px`);
+        cursorEl.style.transform = `translate(${x}px, ${y}px)`;
+      }
+
+      function centerOf(el) {
+        const r = el.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      }
+
+      async function moveCursorTo(x, y, durationMs = 580) {
+        cursorEl.classList.add("visible");
+        const startX = cursorX;
+        const startY = cursorY;
+        const start = performance.now();
+        return new Promise((resolve) => {
+          function tick(now) {
+            const t = Math.min(1, (now - start) / durationMs);
+            const e = easeInOutCubic(t);
+            setCursorPos(startX + (x - startX) * e, startY + (y - startY) * e);
+            if (t < 1) requestAnimationFrame(tick);
+            else resolve();
+          }
+          requestAnimationFrame(tick);
+        });
+      }
+
+      async function moveCursorToSelector(selector, durationMs) {
+        const el = document.querySelector(selector);
+        if (!el) return;
+        const c = centerOf(el);
+        await moveCursorTo(c.x, c.y, durationMs);
+      }
+
+      async function playClickRipple(x, y) {
+        rippleEl.style.left = `${x}px`;
+        rippleEl.style.top = `${y}px`;
+        rippleEl.classList.remove("animate");
+        void rippleEl.offsetWidth;
+        rippleEl.classList.add("animate");
+        cursorEl.classList.remove("click-pulse");
+        void cursorEl.offsetWidth;
+        cursorEl.classList.add("click-pulse");
+        await sleep(220);
+      }
+
+      async function clickSelector(selector) {
+        const el = document.querySelector(selector);
+        if (!el) return;
+        await moveCursorToSelector(selector, 620);
+        const c = centerOf(el);
+        await playClickRipple(c.x, c.y);
+      }
+
+      async function showScene(name) {
+        const next = scenes[name];
+        if (!next || name === currentSceneName) return;
+        Object.values(scenes).forEach((el) => {
+          if (el !== next) el.classList.remove("visible");
+        });
+        next.classList.add("visible");
+        currentSceneName = name;
+        await sleep(560);
+      }
+
+      function showSceneInstant(name) {
         Object.values(scenes).forEach((el) => el.classList.remove("visible"));
         const el = scenes[name];
-        if (el) {
-          el.classList.add("visible");
-        }
+        if (el) el.classList.add("visible");
+        currentSceneName = name;
       }
 
       function setCaption(text) {
         captionEl.textContent = text;
+      }
+
+      async function setCaptionFade(text) {
+        captionEl.style.opacity = "0.35";
+        await sleep(180);
+        captionEl.textContent = text;
+        captionEl.style.opacity = "1";
       }
 
       function pressTestButton() {
@@ -288,11 +384,74 @@
         document.getElementById("combo-team")?.classList.remove("combo-open");
         hideToast();
         document.querySelectorAll("#cmd-table tbody tr").forEach((row) => row.classList.remove("highlight-row"));
+        cursorEl.classList.remove("visible", "click-pulse");
+        setCursorPos(640, 380);
+      }
+
+      async function clickTestNotice() {
+        await clickSelector("#btn-test");
+        pressTestButton();
+        await sleep(350);
+      }
+
+      async function releaseTestNotice() {
+        unpressTestButton();
+        await sleep(120);
+      }
+
+      async function clickSettingsFromActive() {
+        await clickSelector("#btn-settings");
+        await sleep(280);
+      }
+
+      async function clickWinCloseCheckbox() {
+        await clickSelector("#chk-winclose");
+        toggleWinClose();
+        await sleep(320);
+      }
+
+      async function clickRateSlider() {
+        const track = document.querySelector("#scene-settings .slider-row .slider-track");
+        if (track) {
+          const r = track.getBoundingClientRect();
+          await moveCursorTo(r.left + r.width * 0.42, r.top + r.height / 2, 640);
+          await playClickRipple(r.left + r.width * 0.42, r.top + r.height / 2);
+        }
+        bumpRateSlider();
+        await sleep(720);
+      }
+
+      async function clickTeamCombo() {
+        await clickSelector("#combo-team");
+        openTeamCombo();
+        await sleep(400);
+      }
+
+      async function clickCommandRow(cmd) {
+        const row = document.querySelector(`#cmd-table tbody tr[data-cmd="${cmd}"]`);
+        if (!row) return;
+        await moveCursorToSelector(`#cmd-table tbody tr[data-cmd="${cmd}"]`, 520);
+        const c = centerOf(row);
+        await playClickRipple(c.x, c.y);
+        highlightCommand(cmd);
+        await sleep(480);
+      }
+
+      async function revealToast() {
+        await moveCursorTo(980, 118, 700);
+        await playClickRipple(980, 118);
+        showToast();
+        await sleep(650);
       }
 
       return {
         showScene,
+        showSceneInstant,
         setCaption,
+        setCaptionFade,
+        moveCursorTo,
+        moveCursorToSelector,
+        clickSelector,
         pressTestButton,
         unpressTestButton,
         toggleWinClose,
@@ -302,6 +461,15 @@
         hideToast,
         highlightCommand,
         resetInteractions,
+        clickTestNotice,
+        releaseTestNotice,
+        clickSettingsFromActive,
+        clickWinCloseCheckbox,
+        clickRateSlider,
+        clickTeamCombo,
+        clickCommandRow,
+        revealToast,
+        sleep,
       };
     })();
   </script>

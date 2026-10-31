@@ -20,16 +20,30 @@ body {
 .scene {
   position: absolute;
   inset: 0;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.45s ease;
+  visibility: hidden;
+  transform: translateY(10px) scale(0.992);
+  transition:
+    opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s linear 0.55s;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .scene.visible {
-  display: flex;
   opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0s linear 0s;
+  pointer-events: auto;
+  z-index: 2;
 }
 
 .scene-backdrop-plain {
@@ -84,6 +98,11 @@ body {
 .scale-wrap {
   transform: scale(0.92);
   transform-origin: center center;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scene.visible .scale-wrap {
+  transform: scale(0.92);
 }
 
 .scale-wrap-wide {
@@ -108,26 +127,35 @@ body {
   font-weight: 600;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
   pointer-events: none;
+  transition: opacity 0.35s ease;
 }
 
 #caption-bar .feature-name {
   color: #fad947;
 }
 
-.btn.btn-pressed {
-  filter: brightness(1.15);
-  outline: 2px solid rgba(250, 217, 71, 0.5);
+.btn.btn-pressed,
+.btn.btn-pressed:active {
+  filter: brightness(1.12);
+  outline: 2px solid rgba(250, 217, 71, 0.55);
+  transform: translateY(1px);
+}
+
+.checkbox-row input:active + span,
+.checkbox-row:has(input:active) {
+  filter: brightness(1.08);
 }
 
 .highlight-row td {
   background: rgba(250, 217, 71, 0.12) !important;
   outline: 1px solid rgba(250, 217, 71, 0.35);
+  transition: background 0.35s ease, outline 0.35s ease;
 }
 
 .toast-hidden {
   opacity: 0;
-  transform: translateX(-50%) translateY(12px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateX(-50%) translateY(14px);
+  transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .toast-visible {
@@ -141,5 +169,80 @@ body {
 
 .settings-panel .slider-thumb,
 .settings-panel .slider-fill {
-  transition: left 0.6s ease, width 0.6s ease;
+  transition: left 0.65s cubic-bezier(0.4, 0, 0.2, 1), width 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#cursor-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#cursor-pointer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  margin-left: -2px;
+  margin-top: -2px;
+  transform: translate(640px, 380px);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.85));
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+#cursor-pointer.visible {
+  opacity: 1;
+}
+
+#cursor-pointer svg {
+  display: block;
+}
+
+#cursor-ripple {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(250, 217, 71, 0.75);
+  background: rgba(250, 217, 71, 0.15);
+  opacity: 0;
+  transform: scale(0.35);
+  pointer-events: none;
+}
+
+#cursor-ripple.animate {
+  animation: cursor-click-ripple 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes cursor-click-ripple {
+  0% {
+    opacity: 0.85;
+    transform: scale(0.35);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.8);
+  }
+}
+
+#cursor-pointer.click-pulse {
+  animation: cursor-click-pulse 0.22s ease-out;
+}
+
+@keyframes cursor-click-pulse {
+  0% {
+    transform: translate(var(--cx, 640px), var(--cy, 380px)) scale(1);
+  }
+  45% {
+    transform: translate(var(--cx, 640px), var(--cy, 380px)) scale(0.88);
+  }
+  100% {
+    transform: translate(var(--cx, 640px), var(--cy, 380px)) scale(1);
+  }
 }

@@ -109,6 +109,8 @@ dotnet build -c Debug      # load bin/Debug/FrontlineAdvisor.dll as a dev plugin
 dotnet build -c Release    # zip in bin/Release/FrontlineAdvisor/latest.zip
 ```
 
+Pushes to `main` that change the plugin (not docs-only paths) trigger the release workflow, which publishes the next version above the latest GitHub release. Manual tag pushes `v*` still work for cutting a release from the manifest version in the built zip.
+
 ## Install (dev plugin)
 
 1. `/xlsettings` → Experimental → Dev Plugin Locations → add `bin\Debug\FrontlineAdvisor.dll`.

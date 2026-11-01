@@ -21,8 +21,9 @@ public sealed class ConfigWindow : Window, IDisposable
     {
         this.plugin = plugin;
 
-        Flags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.AlwaysAutoResize;
-        Size = new Vector2(440, 0) * ImGuiHelpers.GlobalScale;
+        // No AlwaysAutoResize: it locks the window to its content and blocks the resize grip.
+        Flags = ImGuiWindowFlags.None;
+        Size = new Vector2(440, 700) * ImGuiHelpers.GlobalScale;
         SizeCondition = ImGuiCond.FirstUseEver;
     }
 

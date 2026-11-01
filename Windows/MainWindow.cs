@@ -27,8 +27,9 @@ public sealed class MainWindow : Window, IDisposable
     {
         this.plugin = plugin;
 
-        Flags = ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.AlwaysAutoResize;
-        Size = new Vector2(436, 0) * ImGuiHelpers.GlobalScale;
+        // No AlwaysAutoResize: it locks the window to its content and blocks the resize grip.
+        Flags = ImGuiWindowFlags.None;
+        Size = new Vector2(436, 480) * ImGuiHelpers.GlobalScale;
         SizeCondition = ImGuiCond.FirstUseEver;
     }
 

@@ -53,9 +53,14 @@ jobs:
             "${name}=${value}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           }
 
+          function Reset-ExitCode {
+            $global:LASTEXITCODE = 0
+          }
+
           function Get-TagCommitSha([string]$tagName) {
             $refJson = gh api "repos/$env:GITHUB_REPOSITORY/git/ref/tags/$tagName" 2>$null
             if (-not $refJson) {
+              Reset-ExitCode
               return $null
             }
             $ref = $refJson | ConvertFrom-Json
@@ -125,10 +130,12 @@ jobs:
             Set-Output skip true
             exit 0
           }
+          Reset-ExitCode
 
           Write-Host "Next release version: $nextVersionText (tag $tag)"
           Set-Output skip false
           Set-Output version $nextVersionText
+          exit 0
 
       - name: Set up .NET
         if: steps.version.outputs.skip != 'true'
@@ -144,6 +151,7 @@ jobs:
           New-Item -ItemType Directory -Force -Path $dest | Out-Null
           Invoke-WebRequest -UseBasicParsing -Uri 'https://goatcorp.github.io/dalamud-distrib/latest.zip' -OutFile dalamud.zip
           Expand-Archive -Path dalamud.zip -DestinationPath $dest -Force
+          exit 0
 
       - name: Build FrontlineAdvisor
         if: steps.version.outputs.skip != 'true'
@@ -159,6 +167,10 @@ jobs:
           } else {
             dotnet build FrontlineAdvisor.csproj -c Release
           }
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+          exit 0
 
       - name: Publish GitHub release
         if: steps.version.outputs.skip != 'true'
@@ -167,6 +179,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RELEASE_VERSION: ${{ steps.version.outputs.version }}
         run: |
+          function Reset-ExitCode {
+            $global:LASTEXITCODE = 0
+          }
+
           $zip = Get-ChildItem -Path 'bin/Release' -Recurse -Filter 'latest.zip' -ErrorAction SilentlyContinue |
             Select-Object -First 1
           if (-not $zip) {
@@ -225,5 +241,10 @@ jobs:
             Write-Host "Release $tag already exists; nothing to do."
             exit 0
           }
+          Reset-ExitCode
 
           gh release create $tag $zip.FullName --title $tag --generate-notes
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+          exit 0

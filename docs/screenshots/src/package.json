@@ -6,6 +6,6 @@
     "render": "node render.cjs"
   },
   "devDependencies": {
-    "puppeteer-core": "^22.0.0"
+    "puppeteer-core": "^25.16.0"
   }
 }

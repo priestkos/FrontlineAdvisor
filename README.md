@@ -88,7 +88,7 @@ Three scores live in the instance-content director, beside Battle High; read thr
 | `/fla` | Toggle the window. |
 | `/fla on` / `/fla off` | Master notification switch. |
 | `/fla team mael\|adder\|flame\|auto` | Your Grand Company: 1st/2nd/3rd posture wording. |
-| `/fla map <name\|auto>` | Force a map if detection is wrong. |
+| `/fla map <name\|auto>` | Use another map's target and notes inside a detected Frontline duty. |
 | `/fla dump` | Print live content id, director pointer and raw scores to chat and `/xllog`. |
 | `/fla test` | Fire a sample lead-change notice. |
 | `/fla config` | Open settings. |

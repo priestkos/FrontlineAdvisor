@@ -59,6 +59,19 @@ public static class MapCatalog
     public static FrontlineMap? ByDutyId(uint id) => Maps.FirstOrDefault(m => m.DutyId == id);
 
     /// <summary>
+    /// The map to use for the live duty, or null when the duty is not Frontline. The duty-id gate comes first:
+    /// the raw score offsets are only valid in a Frontline director, so an override must never open it elsewhere.
+    /// Inside Frontline a valid override picks which map's target and notes are used.
+    /// Duty (content-finder condition) ids only: TerritoryType is a different id space and would false-match.
+    /// </summary>
+    public static FrontlineMap? Resolve(uint dutyId, string? mapOverride)
+    {
+        var live = ByDutyId(dutyId);
+        if (live is null) return null;
+        return ByName(mapOverride) ?? live;
+    }
+
+    /// <summary>
     /// Lookup by duty id, exact campaign/zone/display, or a distinctive fragment.
     /// Fragments shorter than 3 characters are rejected so "/fla map a" cannot bind the first entry.
     /// </summary>

@@ -130,7 +130,7 @@ public sealed class Plugin : IDalamudPlugin
 
             // Resolve the map from the safe content-id read first: never touch the raw score offsets outside
             // a recognised Frontline map (Crystalline Conflict and Rival Wings use a different director layout).
-            var map = ResolveMap(FrontlineReader.CurrentDutyId());
+            var map = MapCatalog.Resolve(FrontlineReader.CurrentDutyId(), configuration.MapOverride);
             if (map is null)
             {
                 EndMatch();
@@ -169,20 +169,6 @@ public sealed class Plugin : IDalamudPlugin
         {
             log.Error(ex, "[FrontlineAdvisor] error in the update loop");
         }
-    }
-
-    private FrontlineMap? ResolveMap(uint dutyId)
-    {
-        // An explicit override always wins.
-        if (!string.Equals(configuration.MapOverride, "auto", StringComparison.OrdinalIgnoreCase))
-        {
-            var forced = MapCatalog.ByName(configuration.MapOverride);
-            if (forced is not null) return forced;
-        }
-
-        // Duty / content-finder condition ids only. TerritoryType lives in a different ID space and
-        // must not be looked up against Frontline duty ids (false positives on other PvP content).
-        return MapCatalog.ByDutyId(dutyId);
     }
 
     /// <summary>
@@ -361,8 +347,19 @@ public sealed class Plugin : IDalamudPlugin
 
     private void Dump()
     {
-        var live = FrontlineReader.Read();
         var ptr = FrontlineReader.DirectorAddress();
+        var dutyId = FrontlineReader.CurrentDutyId();
+
+        // The raw score offsets only mean something in a Frontline director; never read them elsewhere.
+        if (MapCatalog.ByDutyId(dutyId) is null)
+        {
+            MainInfo(
+                $"dump: IsPvP={clientState.IsPvP} territory={clientState.TerritoryType} dutyId={dutyId} " +
+                $"director=0x{ptr:X} - not a Frontline duty, scores not read.");
+            return;
+        }
+
+        var live = FrontlineReader.Read();
 
         log.Information(
             $"[FrontlineAdvisor] dump territory={clientState.TerritoryType} dutyId={live.DutyId} " +

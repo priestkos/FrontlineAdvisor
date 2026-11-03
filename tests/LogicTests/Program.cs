@@ -90,6 +90,13 @@ internal static class Program
             Equal(MapCatalog.ByName("Secure")?.Campaign, "Secure", "exact campaign still matches");
 
             Check(MapCatalog.Maps.All(m => m.Note.Length > 40), "every map carries a playbook note");
+
+            // The duty-id gate runs before the override: the raw director read must stay closed outside Frontline.
+            Equal(MapCatalog.Resolve(0, "Secure"), null, "override outside any duty resolves to nothing");
+            Equal(MapCatalog.Resolve(9999, "Shatter"), null, "override in a non-Frontline duty resolves to nothing");
+            Equal(MapCatalog.Resolve(127, "Shatter")?.Campaign, "Shatter", "override picks the map inside Frontline");
+            Equal(MapCatalog.Resolve(127, "auto")?.Campaign, "Secure", "auto uses the live duty");
+            Equal(MapCatalog.Resolve(130, "garuda")?.Campaign, "Seize", "unknown override falls back to the live duty");
         }
 
         internal static void TeamsSection()

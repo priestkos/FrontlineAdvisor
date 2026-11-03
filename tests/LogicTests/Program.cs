@@ -233,6 +233,20 @@ internal static class Program
             notices.AddRange(tracker3.Observe(At(32, 300, 200, 10), map, settings)); // Maelstrom back
             Check(!notices.Any(n => n.Kind == NoticeKind.LeadChange), "lead change respects its cooldown");
 
+            // A change suppressed by the cooldown is announced once the cooldown expires.
+            notices = new List<Notice>();
+            notices.AddRange(tracker3.Observe(At(60, 300, 200, 10), map, settings));
+            Check(notices.Any(n => n.Kind == NoticeKind.LeadChange && n.Team == GrandCompanyTeam.Maelstrom), "suppressed lead change fires after the cooldown");
+
+            // A -> tie -> A is not a lead change.
+            var trackerTie = new MatchTracker();
+            notices = new List<Notice>();
+            notices.AddRange(trackerTie.Observe(At(0, 100, 50, 10), map, settings));
+            notices.AddRange(trackerTie.Observe(At(25, 100, 50, 10), map, settings)); // baseline: Maelstrom
+            notices.AddRange(trackerTie.Observe(At(50, 200, 200, 10), map, settings)); // tie
+            notices.AddRange(trackerTie.Observe(At(80, 300, 200, 10), map, settings)); // Maelstrom again
+            Check(!notices.Any(n => n.Kind == NoticeKind.LeadChange), "a tie and back to the same leader announces nothing");
+
             // Emerging threat fires for a fast non-leader.
             var tracker4 = new MatchTracker();
             notices = new List<Notice>();

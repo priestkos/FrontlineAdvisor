@@ -51,7 +51,8 @@ public sealed class MatchTracker
     private readonly Dictionary<(NoticeKind Kind, GrandCompanyTeam Team), DateTime> lastFired = [];
     private readonly HashSet<GrandCompanyTeam> winImminentFired = [];
 
-    private MatchAnalysis? previous;
+    // The last leader we called (or the baseline leader); ties never change it, so A -> tie -> A stays quiet.
+    private GrandCompanyTeam? lastAnnouncedLeader;
     private DateTime startUtc;
     private bool baselineEstablished;
     private bool firstLeadAnnounced;
@@ -70,7 +71,7 @@ public sealed class MatchTracker
         history.Clear();
         lastFired.Clear();
         winImminentFired.Clear();
-        previous = null;
+        lastAnnouncedLeader = null;
         baselineEstablished = false;
         firstLeadAnnounced = false;
         Latest = null;
@@ -109,7 +110,7 @@ public sealed class MatchTracker
         if (!baselineEstablished)
         {
             baselineEstablished = true;
-            previous = analysis;
+            lastAnnouncedLeader = analysis.Leader;
 
             if (settings.AnnounceFirstLead && !firstLeadAnnounced && analysis.Leader is not null)
             {
@@ -125,13 +126,11 @@ public sealed class MatchTracker
             return notices;
         }
 
-        BuildNotices(previous!, analysis, settings, sample.TimeUtc, notices);
-        previous = analysis;
+        BuildNotices(analysis, settings, sample.TimeUtc, notices);
         return notices;
     }
 
     private void BuildNotices(
-        MatchAnalysis prev,
         MatchAnalysis now,
         NotificationSettings settings,
         DateTime nowUtc,
@@ -140,13 +139,15 @@ public sealed class MatchTracker
         // --- Lead change: the explicit ask ---
         if (settings.AnnounceLeadChange && !now.TiedLead && now.Leader is not null)
         {
-            var changed = prev.Leader != now.Leader;
+            // Compared against the last call, so a change held back by the cooldown is announced once it expires.
+            var changed = lastAnnouncedLeader != now.Leader;
             if (changed && TryCooldown(NoticeKind.LeadChange, null, nowUtc, settings.LeadChangeCooldownSeconds))
             {
                 var lead = now.Standings[0];
                 var second = now.Standings[1];
                 var gap = lead.Score - second.Score;
-                var from = prev.Leader is null ? "a tie" : prev.Leader.Value.Name();
+                var from = lastAnnouncedLeader is null ? "a tie" : lastAnnouncedLeader.Value.Name();
+                lastAnnouncedLeader = now.Leader;
                 outp.Add(new Notice(
                     NoticeKind.LeadChange,
                     now.Leader,

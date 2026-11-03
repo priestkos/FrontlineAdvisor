@@ -29,7 +29,7 @@ public sealed class MainWindow : Window, IDisposable
 
         // No AlwaysAutoResize: it locks the window to its content and blocks the resize grip.
         Flags = ImGuiWindowFlags.None;
-        Size = new Vector2(436, 480) * ImGuiHelpers.GlobalScale;
+        Size = new Vector2(436, 480); // WindowHost applies GlobalScale
         SizeCondition = ImGuiCond.FirstUseEver;
     }
 
@@ -202,7 +202,7 @@ public sealed class MainWindow : Window, IDisposable
             if (plugin.InFrontline && plugin.LastReadUtc != default)
             {
                 var age = (DateTime.UtcNow - plugin.LastReadUtc).TotalSeconds;
-                ImGui.TextUnformatted($"Reading every second \u00b7 last {age:0.0}s ago \u00b7 Battle High {plugin.Snapshot.BattleHigh}");
+                ImGui.TextUnformatted($"Reading every second \u00b7 last {age:0.0}s ago \u00b7 Battle High {(plugin.Snapshot.BattleHigh < 0 ? "n/a" : plugin.Snapshot.BattleHigh.ToString())}");
             }
             else
             {

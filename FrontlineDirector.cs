@@ -44,6 +44,9 @@ internal static unsafe class FrontlineReader
 {
     private const int SanityCap = 9999;
 
+    // Battle High points: PvpStats treats >= 100 as Battle High V, the top tier; above that the offset is stale.
+    private const int BattleHighCap = 100;
+
     internal static nint DirectorAddress()
     {
         var framework = EventFramework.Instance();
@@ -85,6 +88,8 @@ internal static unsafe class FrontlineReader
             return DirectorSnapshot.Unavailable(dutyId, timeMax,
                 "scores out of range - the score offset may need re-deriving for this patch");
 
-        return new DirectorSnapshot(true, mael, adder, flame, scores->PlayerBattleHigh, dutyId, timeMax, null);
+        // An implausible Battle High is reported as -1 (no reading) without discarding good scores.
+        var bh = scores->PlayerBattleHigh;
+        return new DirectorSnapshot(true, mael, adder, flame, bh <= BattleHighCap ? bh : -1, dutyId, timeMax, null);
     }
 }

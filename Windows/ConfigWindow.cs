@@ -23,7 +23,7 @@ public sealed class ConfigWindow : Window, IDisposable
 
         // No AlwaysAutoResize: it locks the window to its content and blocks the resize grip.
         Flags = ImGuiWindowFlags.None;
-        Size = new Vector2(440, 700) * ImGuiHelpers.GlobalScale;
+        Size = new Vector2(440, 700); // WindowHost applies GlobalScale
         SizeCondition = ImGuiCond.FirstUseEver;
     }
 

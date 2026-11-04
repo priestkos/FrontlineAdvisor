@@ -6,6 +6,8 @@ Reads the live Frontline scoreboard and says who is winning, who to focus, who i
 
 `/fla` · Dalamud API 15 · .NET 10
 
+> **No support will be provided. This software is to be used as is, without warranty of any kind.**
+
 ## What it does
 
 - **Standings** — leader, gap to second, points left.

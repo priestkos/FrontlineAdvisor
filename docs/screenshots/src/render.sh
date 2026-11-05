@@ -3,7 +3,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT"
-if [[ ! -d node_modules/puppeteer-core ]]; then
+if [[ ! -d node_modules/playwright-core ]]; then
   npm install
 fi
-node render.cjs
+node render-screenshots.mjs

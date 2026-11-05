@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="screenshot-canvas">
 <head>
   <meta charset="utf-8" />
   <title>Frontline Advisor — Settings mock-up</title>
   <link rel="stylesheet" href="imgui-mock.css" />
   <style>.imgui-window { max-width: 440px; }</style>
 </head>
-<body class="backdrop-plain">
+<body class="screenshot-canvas backdrop-plain">
+  <div class="mockup-banner">Mock-up</div>
+  <div class="scene-label">Settings (/fla config) — Enabled, Announce, How, Your team, Map, Tuning</div>
+  <div class="screenshot-center settings-fit">
   <div class="imgui-window">
     <div class="imgui-titlebar">Frontline Advisor — Settings</div>
     <div class="imgui-body">
@@ -24,7 +27,7 @@
       <label class="checkbox-row"><input type="checkbox" checked /> Server info bar</label>
       <div class="spacer"></div>
       <div class="section-title">Your team</div>
-      <div class="combo">maelstrom</div>
+      <div class="combo">Maelstrom</div>
       <div class="dim" style="font-size:12px;margin-bottom:8px;">Pick your Grand Company for 1st/2nd/3rd posture wording. Auto keeps the advice absolute.</div>
       <div class="section-title">Map</div>
       <div class="combo">auto</div>
@@ -58,6 +61,7 @@
       <div class="separator"></div>
       <div class="dim" style="font-size:12px;">/fla on | off | team | map | dump | test. Frontline Advisor reads the game's own score board; it hooks nothing and writes nothing back.</div>
     </div>
+  </div>
   </div>
 </body>
 </html>

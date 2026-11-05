@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="screenshot-canvas">
 <head>
   <meta charset="utf-8" />
   <title>Frontline Advisor — notifications mock-up</title>
   <link rel="stylesheet" href="imgui-mock.css" />
   <style>
-    html, body { margin: 0; padding: 0; width: 1280px; height: 720px; overflow: hidden; }
     body.backdrop-scene { padding: 0; display: block; }
+    .overlay-root { width: 1280px; height: 720px; }
   </style>
 </head>
-<body class="backdrop-scene">
+<body class="screenshot-canvas backdrop-scene">
+  <div class="mockup-banner">Mock-up</div>
+  <div class="scene-label">Notifications — chat FRONTLINE tags, screen toast, server info bar (FR: …), /fla dump</div>
+  <div class="screenshot-center overlay-fit">
   <div class="overlay-root">
     <div class="dtr-bar">
       <span class="dtr-entry">Example Character · Lv. 100</span>
@@ -38,6 +41,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </body>
 </html>

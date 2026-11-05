@@ -2,28 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Frontline Advisor — mock-up walkthrough (not live game)</title>
-  <link rel="stylesheet" href="../../screenshots/src/imgui-mock.css" />
+  <title>Frontline Advisor — mock-up walkthrough</title>
   <link rel="stylesheet" href="walkthrough.css" />
 </head>
 <body>
   <div id="stage">
-    <div id="scene-disclaimer" class="scene visible">
-      <div class="disclaimer-badge">UI mock-up</div>
-      <div class="disclaimer-title">Frontline Advisor</div>
-      <div class="disclaimer-sub">
-        These windows and overlays are HTML mock-ups for the README — not captures from the live game.
-      </div>
-    </div>
+    <div class="mockup-banner">Mock-up</div>
+    <div id="beat-label">Frontline Advisor</div>
+    <div id="video-caption">HTML mock-ups for the README — not live game footage</div>
 
     <div id="scene-active" class="scene scene-backdrop-plain">
-      <div class="scale-wrap">
-        <div class="imgui-window" id="win-active">
+      <div class="scale-wrap" style="transform: scale(0.82);">
+        <div class="imgui-window">
           <div class="imgui-titlebar">Frontline Advisor</div>
           <div class="imgui-body">
             <div class="header-row">
               <span class="title-lg">Frontline Advisor</span>
-              <span class="notices-label notices-on" id="active-notices">Notices: on</span>
+              <span class="notices-label notices-on">Notices: on</span>
             </div>
             <div class="spacer"></div>
             <div class="dim">The Fields of Glory (Shatter) · win at 1,600</div>
@@ -32,31 +27,20 @@
             <div class="spacer"></div>
             <table class="standings">
               <thead>
-                <tr>
-                  <th>Team</th><th>Pts</th><th>Gap</th><th>/min</th><th>To win</th>
-                </tr>
+                <tr><th>Team</th><th>Pts</th><th>Gap</th><th>/min</th><th>To win</th></tr>
               </thead>
               <tbody>
                 <tr>
                   <td class="team-mael">▲ Maelstrom · you</td>
-                  <td class="main">1,240</td>
-                  <td class="dim">0</td>
-                  <td class="threat">+42</td>
-                  <td class="dim">360 (~8m)</td>
+                  <td class="main">1,240</td><td class="dim">0</td><td class="threat">+42</td><td class="dim">360 (~8m)</td>
                 </tr>
                 <tr>
                   <td class="team-adder">&nbsp;&nbsp;Twin Adder</td>
-                  <td class="main">1,180</td>
-                  <td class="dim">60</td>
-                  <td class="threat">+55</td>
-                  <td class="dim">420 (~7m)</td>
+                  <td class="main">1,180</td><td class="dim">60</td><td class="threat">+55</td><td class="dim">420 (~7m)</td>
                 </tr>
                 <tr>
                   <td class="team-flame">&nbsp;&nbsp;Immortal Flames</td>
-                  <td class="main">890</td>
-                  <td class="dim">350</td>
-                  <td class="dim">+18</td>
-                  <td class="dim">710 (~39m)</td>
+                  <td class="main">890</td><td class="dim">350</td><td class="dim">+18</td><td class="dim">710 (~39m)</td>
                 </tr>
               </tbody>
             </table>
@@ -71,7 +55,7 @@
             <div class="separator"></div>
             <div class="footer-meta">Reading every second · last 0.4s ago · Battle High 42</div>
             <div class="btn-row">
-              <button type="button" class="btn" id="btn-settings">Settings</button>
+              <button type="button" class="btn">Settings</button>
               <button type="button" class="btn btn-secondary" id="btn-test">Test notice</button>
             </div>
           </div>
@@ -107,15 +91,15 @@
 
     <div id="scene-settings" class="scene scene-backdrop-plain settings-panel">
       <div class="scale-wrap">
-        <div class="imgui-window" style="max-width: 440px;">
+        <div class="imgui-window">
           <div class="imgui-titlebar">Frontline Advisor — Settings</div>
           <div class="imgui-body">
-            <label class="checkbox-row"><input type="checkbox" id="chk-enabled" checked /> Enabled</label>
+            <label class="checkbox-row"><input type="checkbox" checked /> Enabled</label>
             <div class="spacer"></div>
             <div class="section-title">Announce</div>
-            <label class="checkbox-row"><input type="checkbox" id="chk-lead" checked /> Lead change</label>
-            <label class="checkbox-row"><input type="checkbox" id="chk-first" checked /> First lead</label>
-            <label class="checkbox-row"><input type="checkbox" id="chk-threat" checked /> Emerging threat</label>
+            <label class="checkbox-row"><input type="checkbox" checked /> Lead change</label>
+            <label class="checkbox-row"><input type="checkbox" checked /> First lead</label>
+            <label class="checkbox-row"><input type="checkbox" checked /> Emerging threat</label>
             <label class="checkbox-row"><input type="checkbox" id="chk-winclose" checked /> Win close</label>
             <div class="spacer"></div>
             <div class="section-title">How</div>
@@ -124,24 +108,18 @@
             <label class="checkbox-row"><input type="checkbox" checked /> Server info bar</label>
             <div class="spacer"></div>
             <div class="section-title">Your team</div>
-            <div class="combo" id="combo-team">maelstrom</div>
+            <div class="combo">Maelstrom</div>
             <div class="section-title">Map</div>
-            <div class="combo" id="combo-map">auto</div>
+            <div class="combo">auto</div>
             <div class="spacer"></div>
             <div class="section-title">Tuning</div>
             <div class="slider-row">
               <label>Rate window (s)</label>
-              <div class="slider-track">
-                <div class="slider-fill" id="rate-fill" style="width:28%"></div>
-                <div class="slider-thumb" id="rate-thumb" style="left:28%"></div>
-              </div>
+              <div class="slider-track"><div class="slider-fill" id="rate-fill" style="width:28%"></div><div class="slider-thumb" id="rate-thumb" style="left:28%"></div></div>
             </div>
             <div class="slider-row">
-              <label>Surge rate /min</label>
-              <div class="slider-track">
-                <div class="slider-fill" style="width:17%"></div>
-                <div class="slider-thumb" style="left:17%"></div>
-              </div>
+              <label>Win margin</label>
+              <div class="slider-track"><div class="slider-fill" style="width:21%"></div><div class="slider-thumb" style="left:21%"></div></div>
             </div>
           </div>
         </div>
@@ -167,7 +145,7 @@
             <div class="imgui-body" style="padding:10px;">
               <div class="header-row">
                 <span class="title-lg" style="font-size:15px;">Frontline Advisor</span>
-                <span class="notices-label notices-off" id="notify-notices">Notices: off</span>
+                <span class="notices-label notices-off">Notices: off</span>
               </div>
               <div class="spacer"></div>
               <div class="dim" style="font-size:12px;">Master switch via /fla off — window still reads scores.</div>
@@ -187,7 +165,6 @@
             <table class="cmd-table" id="cmd-table">
               <thead><tr><th>Command</th><th>Example chat line</th></tr></thead>
               <tbody>
-                <tr data-cmd="fla"><td><code>/fla</code></td><td class="dim">(toggles the advisor window)</td></tr>
                 <tr data-cmd="on"><td><code>/fla on</code></td><td>[Frontline Advisor] Advisor notices ON.</td></tr>
                 <tr data-cmd="off"><td><code>/fla off</code></td><td>[Frontline Advisor] Advisor notices OFF.</td></tr>
                 <tr data-cmd="team"><td><code>/fla team auto</code></td><td>[Frontline Advisor] Your team set to auto (advice is phrased in absolute terms).</td></tr>
@@ -201,277 +178,169 @@
       </div>
     </div>
 
-    <div id="caption-bar"><span class="feature-name" id="caption-text">UI mock-up — not from the live game</span></div>
-
-    <div id="cursor-layer" aria-hidden="true">
-      <div id="cursor-ripple"></div>
-      <div id="cursor-pointer">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M5 3L5 19L9.5 14.5L13 21L15.5 20L12 13.5L18 13.5L5 3Z" fill="#f2f5ff" stroke="#0a0a12" stroke-width="1.2" stroke-linejoin="round"/>
-        </svg>
-      </div>
+    <div id="cursor-pointer" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 3L5 19L9.5 14.5L13 21L15.5 20L12 13.5L18 13.5L5 3Z" fill="#f2f5ff" stroke="#0a0a12" stroke-width="1.2" stroke-linejoin="round"/>
+      </svg>
     </div>
   </div>
 
-  <style>
-    .cmd-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
-    .cmd-table th { text-align: left; color: var(--text-dim); padding: 6px 8px; border-bottom: 1px solid var(--win-border); }
-    .cmd-table td { padding: 8px; color: var(--text-main); vertical-align: top; }
-    .cmd-table tr:nth-child(even) td { background: var(--row-alt); }
-    code { color: var(--accent); font-family: Consolas, monospace; font-size: 12px; }
-  </style>
-
   <script>
-    window.Walkthrough = (function () {
-      const scenes = {
-        disclaimer: document.getElementById("scene-disclaimer"),
-        active: document.getElementById("scene-active"),
-        idle: document.getElementById("scene-idle"),
-        settings: document.getElementById("scene-settings"),
-        notify: document.getElementById("scene-notify"),
-        commands: document.getElementById("scene-commands"),
-      };
-      const captionEl = document.getElementById("caption-text");
-      const cursorEl = document.getElementById("cursor-pointer");
-      const rippleEl = document.getElementById("cursor-ripple");
-      let cursorX = 640;
-      let cursorY = 380;
-      let currentSceneName = "disclaimer";
+    const scenes = [
+      {
+        id: "scene-active",
+        start: 0,
+        end: 3.2,
+        beat: "Main window · in match",
+        caption: "Standings, headline, FOCUS / THREAT / YOUR POSTURE, Shatter map note · /fla test",
+      },
+      {
+        id: "scene-idle",
+        start: 2.8,
+        end: 6.0,
+        beat: "Main window · idle",
+        caption: "Not in a Frontline match — queue help, Settings and Test notice",
+      },
+      {
+        id: "scene-settings",
+        start: 5.6,
+        end: 9.2,
+        beat: "Settings · /fla config",
+        caption: "Enabled, Announce, How, team/map combos, tuning sliders",
+      },
+      {
+        id: "scene-notify",
+        start: 8.8,
+        end: 12.4,
+        beat: "Notifications",
+        caption: "Chat FRONTLINE tags, screen toast, server info bar (FR: …), /fla off",
+      },
+      {
+        id: "scene-commands",
+        start: 12.0,
+        end: 15.0,
+        beat: "Slash commands · /fla",
+        caption: "on · off · team · map · dump · test · config chat responses",
+      },
+    ];
 
-      function easeInOutCubic(t) {
-        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    function easeOutCubic(x) {
+      return 1 - Math.pow(1 - x, 3);
+    }
+
+    function sceneMotion(t, start, end) {
+      const fade = 0.42;
+      let opacity = 0;
+      let ty = 10;
+      if (t < start) {
+        opacity = 0;
+        ty = 10;
+      } else if (t > end) {
+        opacity = 0;
+        ty = -6;
+      } else if (t < start + fade) {
+        const p = (t - start) / fade;
+        const e = easeOutCubic(p);
+        opacity = e;
+        ty = 10 * (1 - e);
+      } else if (t > end - fade) {
+        const p = (end - t) / fade;
+        const e = easeOutCubic(p);
+        opacity = e;
+        ty = -6 * (1 - e);
+      } else {
+        opacity = 1;
+        ty = 0;
+      }
+      return { opacity, ty };
+    }
+
+    function setCursor(x, y, visible) {
+      const el = document.getElementById("cursor-pointer");
+      el.style.transform = `translate(${x}px, ${y}px)`;
+      el.classList.toggle("visible", visible);
+    }
+
+    function centerOf(el) {
+      const r = el.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    }
+
+    window.seekWalkthrough = function (t) {
+      for (const s of scenes) {
+        const el = document.getElementById(s.id);
+        const { opacity, ty } = sceneMotion(t, s.start, s.end);
+        el.style.opacity = String(opacity);
+        el.style.transform = `translateY(${ty}px)`;
       }
 
-      function sleep(ms) {
-        return new Promise((r) => setTimeout(r, ms));
-      }
-
-      function setCursorPos(x, y) {
-        cursorX = x;
-        cursorY = y;
-        cursorEl.style.setProperty("--cx", `${x}px`);
-        cursorEl.style.setProperty("--cy", `${y}px`);
-        cursorEl.style.transform = `translate(${x}px, ${y}px)`;
-      }
-
-      function centerOf(el) {
-        const r = el.getBoundingClientRect();
-        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-      }
-
-      async function moveCursorTo(x, y, durationMs = 580) {
-        cursorEl.classList.add("visible");
-        const startX = cursorX;
-        const startY = cursorY;
-        const start = performance.now();
-        return new Promise((resolve) => {
-          function tick(now) {
-            const t = Math.min(1, (now - start) / durationMs);
-            const e = easeInOutCubic(t);
-            setCursorPos(startX + (x - startX) * e, startY + (y - startY) * e);
-            if (t < 1) requestAnimationFrame(tick);
-            else resolve();
-          }
-          requestAnimationFrame(tick);
-        });
-      }
-
-      async function moveCursorToSelector(selector, durationMs) {
-        const el = document.querySelector(selector);
-        if (!el) return;
-        const c = centerOf(el);
-        await moveCursorTo(c.x, c.y, durationMs);
-      }
-
-      async function playClickRipple(x, y) {
-        rippleEl.style.left = `${x}px`;
-        rippleEl.style.top = `${y}px`;
-        rippleEl.classList.remove("animate");
-        void rippleEl.offsetWidth;
-        rippleEl.classList.add("animate");
-        cursorEl.classList.remove("click-pulse");
-        void cursorEl.offsetWidth;
-        cursorEl.classList.add("click-pulse");
-        await sleep(220);
-      }
-
-      async function clickSelector(selector) {
-        const el = document.querySelector(selector);
-        if (!el) return;
-        await moveCursorToSelector(selector, 620);
-        const c = centerOf(el);
-        await playClickRipple(c.x, c.y);
-      }
-
-      async function showScene(name) {
-        const next = scenes[name];
-        if (!next || name === currentSceneName) return;
-        Object.values(scenes).forEach((el) => {
-          if (el !== next) el.classList.remove("visible");
-        });
-        next.classList.add("visible");
-        currentSceneName = name;
-        await sleep(560);
-      }
-
-      function showSceneInstant(name) {
-        Object.values(scenes).forEach((el) => el.classList.remove("visible"));
-        const el = scenes[name];
-        if (el) el.classList.add("visible");
-        currentSceneName = name;
-      }
-
-      function setCaption(text) {
-        captionEl.textContent = text;
-      }
-
-      async function setCaptionFade(text) {
-        captionEl.style.opacity = "0.35";
-        await sleep(180);
-        captionEl.textContent = text;
-        captionEl.style.opacity = "1";
-      }
-
-      function pressTestButton() {
-        document.getElementById("btn-test")?.classList.add("btn-pressed");
-      }
-
-      function unpressTestButton() {
-        document.getElementById("btn-test")?.classList.remove("btn-pressed");
-      }
-
-      function toggleWinClose() {
-        const el = document.getElementById("chk-winclose");
-        if (el) el.checked = !el.checked;
-      }
-
-      function bumpRateSlider() {
-        const fill = document.getElementById("rate-fill");
-        const thumb = document.getElementById("rate-thumb");
-        if (fill) fill.style.width = "42%";
-        if (thumb) thumb.style.left = "42%";
-      }
-
-      function openTeamCombo() {
-        document.getElementById("combo-team")?.classList.add("combo-open");
-      }
-
-      function showToast() {
-        document.getElementById("walkthrough-toast")?.classList.add("toast-visible");
-        document.getElementById("walkthrough-toast")?.classList.remove("toast-hidden");
-      }
-
-      function hideToast() {
-        const t = document.getElementById("walkthrough-toast");
-        t?.classList.remove("toast-visible");
-        t?.classList.add("toast-hidden");
-      }
-
-      function highlightCommand(cmd) {
-        document.querySelectorAll("#cmd-table tbody tr").forEach((row) => {
-          row.classList.toggle("highlight-row", row.dataset.cmd === cmd);
-        });
-      }
-
-      function resetInteractions() {
-        unpressTestButton();
-        const wc = document.getElementById("chk-winclose");
-        if (wc) wc.checked = true;
-        const fill = document.getElementById("rate-fill");
-        const thumb = document.getElementById("rate-thumb");
-        if (fill) fill.style.width = "28%";
-        if (thumb) thumb.style.left = "28%";
-        document.getElementById("combo-team")?.classList.remove("combo-open");
-        hideToast();
-        document.querySelectorAll("#cmd-table tbody tr").forEach((row) => row.classList.remove("highlight-row"));
-        cursorEl.classList.remove("visible", "click-pulse");
-        setCursorPos(640, 380);
-      }
-
-      async function clickTestNotice() {
-        await clickSelector("#btn-test");
-        pressTestButton();
-        await sleep(350);
-      }
-
-      async function releaseTestNotice() {
-        unpressTestButton();
-        await sleep(120);
-      }
-
-      async function clickSettingsFromActive() {
-        await clickSelector("#btn-settings");
-        await sleep(280);
-      }
-
-      async function clickWinCloseCheckbox() {
-        await clickSelector("#chk-winclose");
-        toggleWinClose();
-        await sleep(320);
-      }
-
-      async function clickRateSlider() {
-        const track = document.querySelector("#scene-settings .slider-row .slider-track");
-        if (track) {
-          const r = track.getBoundingClientRect();
-          await moveCursorTo(r.left + r.width * 0.42, r.top + r.height / 2, 640);
-          await playClickRipple(r.left + r.width * 0.42, r.top + r.height / 2);
+      let beat = "Frontline Advisor";
+      let caption = "HTML mock-ups for the README — not live game footage";
+      for (const s of scenes) {
+        if (t >= s.start && t <= s.end) {
+          beat = s.beat;
+          caption = s.caption;
         }
-        bumpRateSlider();
-        await sleep(720);
+      }
+      document.getElementById("beat-label").textContent = beat;
+      document.getElementById("video-caption").textContent = caption;
+
+      const testBtn = document.getElementById("btn-test");
+      const inActive = sceneMotion(t, scenes[0].start, scenes[0].end).opacity > 0.05;
+      if (testBtn && inActive && t >= 1.0 && t <= 2.0) {
+        testBtn.classList.add("btn-pressed");
+        const c = centerOf(testBtn);
+        setCursor(c.x, c.y, true);
+      } else if (testBtn) {
+        testBtn.classList.remove("btn-pressed");
       }
 
-      async function clickTeamCombo() {
-        await clickSelector("#combo-team");
-        openTeamCombo();
-        await sleep(400);
+      const winClose = document.getElementById("chk-winclose");
+      const inSettings = sceneMotion(t, scenes[2].start, scenes[2].end).opacity > 0.05;
+      if (winClose && inSettings) {
+        winClose.checked = t < 7.4;
+        if (t >= 6.8 && t <= 7.8 && winClose.parentElement) {
+          const c = centerOf(winClose.parentElement);
+          setCursor(c.x, c.y, true);
+        }
       }
 
-      async function clickCommandRow(cmd) {
-        const row = document.querySelector(`#cmd-table tbody tr[data-cmd="${cmd}"]`);
-        if (!row) return;
-        await moveCursorToSelector(`#cmd-table tbody tr[data-cmd="${cmd}"]`, 520);
-        const c = centerOf(row);
-        await playClickRipple(c.x, c.y);
-        highlightCommand(cmd);
-        await sleep(480);
+      const toast = document.getElementById("walkthrough-toast");
+      const inNotify = sceneMotion(t, scenes[3].start, scenes[3].end).opacity > 0.05;
+      if (toast && inNotify) {
+        const show = t >= 10.2;
+        toast.classList.toggle("toast-visible", show);
+        toast.classList.toggle("toast-hidden", !show);
+        if (show) setCursor(980, 118, true);
+      } else if (toast) {
+        toast.classList.remove("toast-visible");
+        toast.classList.add("toast-hidden");
       }
 
-      async function revealToast() {
-        await moveCursorTo(980, 118, 700);
-        await playClickRipple(980, 118);
-        showToast();
-        await sleep(650);
-      }
+      document.querySelectorAll("#cmd-table tbody tr").forEach((row) => {
+        const inCmd = sceneMotion(t, scenes[4].start, scenes[4].end).opacity > 0.05;
+        let hi = false;
+        if (inCmd && t >= 13.0 && t <= 13.6 && row.dataset.cmd === "dump") hi = true;
+        if (inCmd && t >= 13.6 && t <= 14.2 && row.dataset.cmd === "test") hi = true;
+        if (inCmd && t >= 14.2 && row.dataset.cmd === "config") hi = true;
+        row.classList.toggle("highlight-row", hi);
+        if (hi) {
+          const c = centerOf(row);
+          setCursor(c.x, c.y, true);
+        }
+      });
 
-      return {
-        showScene,
-        showSceneInstant,
-        setCaption,
-        setCaptionFade,
-        moveCursorTo,
-        moveCursorToSelector,
-        clickSelector,
-        pressTestButton,
-        unpressTestButton,
-        toggleWinClose,
-        bumpRateSlider,
-        openTeamCombo,
-        showToast,
-        hideToast,
-        highlightCommand,
-        resetInteractions,
-        clickTestNotice,
-        releaseTestNotice,
-        clickSettingsFromActive,
-        clickWinCloseCheckbox,
-        clickRateSlider,
-        clickTeamCombo,
-        clickCommandRow,
-        revealToast,
-        sleep,
-      };
-    })();
+      if (
+        !inActive &&
+        !(inSettings && t >= 6.8 && t <= 7.8) &&
+        !(inNotify && t >= 10.2) &&
+        !(sceneMotion(t, scenes[4].start, scenes[4].end).opacity > 0.05 && t >= 13.0)
+      ) {
+        setCursor(640, 360, false);
+      }
+    };
+
+    seekWalkthrough(0);
   </script>
 </body>
 </html>

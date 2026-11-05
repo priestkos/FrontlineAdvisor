@@ -35,7 +35,7 @@ The clip below is the same HTML mock-ups in sequence — **not** footage from th
 
 ![Mock-up walkthrough preview](docs/videos/mockup-walkthrough.gif)
 
-[Download mockup-walkthrough.mp4](docs/videos/mockup-walkthrough.mp4) (H.264, 1280×720)
+[Download mockup-walkthrough.mp4](docs/videos/mockup-walkthrough.mp4) (H.264, 1280×720, ~15 s)
 
 ### Feature coverage
 

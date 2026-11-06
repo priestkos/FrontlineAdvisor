@@ -12,8 +12,8 @@
     <div id="video-caption">HTML mock-ups for the README — not live game footage</div>
 
     <div id="scene-active" class="scene scene-backdrop-plain">
-      <div class="scale-wrap" style="transform: scale(0.82);">
-        <div class="imgui-window">
+      <div class="scale-wrap" style="transform: scale(0.82) translateY(24px);">
+        <div class="imgui-window" style="width:600px;font-size:13px;">
           <div class="imgui-titlebar">Frontline Advisor</div>
           <div class="imgui-body">
             <div class="header-row">
@@ -32,22 +32,22 @@
               <tbody>
                 <tr>
                   <td class="team-mael">▲ Maelstrom · you</td>
-                  <td class="main">1,240</td><td class="dim">0</td><td class="threat">+42</td><td class="dim">360 (~8m)</td>
+                  <td class="main">1,240</td><td class="dim">0</td><td class="threat">+45</td><td class="dim">360 (~8m)</td>
                 </tr>
                 <tr>
                   <td class="team-adder">&nbsp;&nbsp;Twin Adder</td>
-                  <td class="main">1,180</td><td class="dim">60</td><td class="threat">+55</td><td class="dim">420 (~7m)</td>
+                  <td class="main">1,180</td><td class="dim">60</td><td class="threat">+50</td><td class="dim">420 (~8m24s)</td>
                 </tr>
                 <tr>
                   <td class="team-flame">&nbsp;&nbsp;Immortal Flames</td>
-                  <td class="main">890</td><td class="dim">350</td><td class="dim">+18</td><td class="dim">710 (~39m)</td>
+                  <td class="main">890</td><td class="dim">350</td><td class="threat">+20</td><td class="dim">710 (~35m30s)</td>
                 </tr>
               </tbody>
             </table>
             <div class="panel-title accent">FOCUS: Maelstrom</div>
             <div class="panel-body">Your target is the leader: Maelstrom. Win by rating, not kills: deny their objectives, and pinch them only while they are already committed against the third company — never brawl them 1v2. You are the leader: your enemy is the clock. Hold, stay unclumped and out of the open melee.</div>
             <div class="panel-title threat">THREAT SOON: Twin Adder</div>
-            <div class="panel-body">Twin Adder is scoring fastest (+55/min) and is the team to watch in the next few minutes. At this rate they overtake Maelstrom in about 6m — break their income now.</div>
+            <div class="panel-body">Twin Adder is scoring fastest (+50/min) and is the team to watch in the next few minutes. At this rate they overtake Maelstrom in about 12m — break their income now.</div>
             <div class="panel-title main">YOUR POSTURE</div>
             <div class="panel-body">You lead. Your enemy is the clock: accumulate quietly, stay unclumped, take uncontested objectives and avoid the open melee — a visible runaway leader is a 2v1 waiting to happen.</div>
             <div class="panel-title dim">SHATTER: THE DAMAGE RACE</div>
@@ -90,7 +90,7 @@
     </div>
 
     <div id="scene-settings" class="scene scene-backdrop-plain settings-panel">
-      <div class="scale-wrap">
+      <div class="scale-wrap" style="transform: scale(0.84) translateY(30px);">
         <div class="imgui-window">
           <div class="imgui-titlebar">Frontline Advisor — Settings</div>
           <div class="imgui-body">
@@ -109,18 +109,38 @@
             <div class="spacer"></div>
             <div class="section-title">Your team</div>
             <div class="combo">Maelstrom</div>
+            <div class="dim" style="font-size:12px;margin-bottom:8px;">Pick your Grand Company for 1st/2nd/3rd posture wording. Auto keeps the advice absolute.</div>
             <div class="section-title">Map</div>
             <div class="combo">auto</div>
+            <div class="dim" style="font-size:12px;">Auto follows the live content id. Force one only if detection is wrong.</div>
             <div class="spacer"></div>
             <div class="section-title">Tuning</div>
             <div class="slider-row">
               <label>Rate window (s)</label>
-              <div class="slider-track"><div class="slider-fill" id="rate-fill" style="width:28%"></div><div class="slider-thumb" id="rate-thumb" style="left:28%"></div></div>
+              <div class="slider-track" data-value="90"><div class="slider-thumb" style="left:25%"></div></div>
+            </div>
+            <div class="slider-row">
+              <label>Start grace (s)</label>
+              <div class="slider-track" data-value="20"><div class="slider-thumb" style="left:22%"></div></div>
+            </div>
+            <div class="slider-row">
+              <label>Surge rate /min</label>
+              <div class="slider-track" data-value="60"><div class="slider-thumb" style="left:17%"></div></div>
             </div>
             <div class="slider-row">
               <label>Win margin</label>
-              <div class="slider-track"><div class="slider-fill" style="width:21%"></div><div class="slider-thumb" style="left:21%"></div></div>
+              <div class="slider-track" data-value="150"><div class="slider-thumb" style="left:22%"></div></div>
             </div>
+            <div class="slider-row">
+              <label>Lead cooldown (s)</label>
+              <div class="slider-track" data-value="20"><div class="slider-thumb" style="left:17%"></div></div>
+            </div>
+            <div class="slider-row">
+              <label>Threat cooldown (s)</label>
+              <div class="slider-track" data-value="30"><div class="slider-thumb" style="left:17%"></div></div>
+            </div>
+            <div class="separator"></div>
+            <div class="dim" style="font-size:12px;">/fla on | off | team | map | dump | test.  Frontline Advisor reads the game's own score board; it hooks nothing and writes nothing back.</div>
           </div>
         </div>
       </div>
@@ -148,7 +168,8 @@
                 <span class="notices-label notices-off">Notices: off</span>
               </div>
               <div class="spacer"></div>
-              <div class="dim" style="font-size:12px;">Master switch via /fla off — window still reads scores.</div>
+              <div class="dim" style="font-size:12px;">The Fields of Glory (Shatter) · win at 1,600</div>
+                  <div class="main" style="font-size:12px;margin-top:4px;">Maelstrom leads on 1,240 — 60 ahead of Twin Adder (1,180).</div>
             </div>
           </div>
         </div>
@@ -168,6 +189,7 @@
                 <tr data-cmd="on"><td><code>/fla on</code></td><td>[Frontline Advisor] Advisor notices ON.</td></tr>
                 <tr data-cmd="off"><td><code>/fla off</code></td><td>[Frontline Advisor] Advisor notices OFF.</td></tr>
                 <tr data-cmd="team"><td><code>/fla team auto</code></td><td>[Frontline Advisor] Your team set to auto (advice is phrased in absolute terms).</td></tr>
+                <tr data-cmd="map"><td><code>/fla map Shatter</code></td><td>[Frontline Advisor] Map forced to The Fields of Glory (Shatter) (win at 1,600).</td></tr>
                 <tr data-cmd="dump"><td><code>/fla dump</code></td><td>[Frontline Advisor] dump: IsPvP=… dutyId=… ok=… scores=[…] map=…</td></tr>
                 <tr data-cmd="test"><td><code>/fla test</code></td><td>[Frontline Advisor] Test notice fired (a sample lead change).</td></tr>
                 <tr data-cmd="config"><td><code>/fla config</code></td><td class="dim">(opens Frontline Advisor — Settings)</td></tr>

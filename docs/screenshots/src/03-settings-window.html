@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <title>Frontline Advisor — Settings mock-up</title>
   <link rel="stylesheet" href="imgui-mock.css" />
-  <style>.imgui-window { max-width: 440px; }</style>
+  <style>.imgui-window { max-width: 440px; } .screenshot-center.settings-fit .imgui-window { max-height: none; transform: scale(0.82); }</style>
 </head>
 <body class="screenshot-canvas backdrop-plain">
   <div class="mockup-banner">Mock-up</div>
@@ -36,27 +36,27 @@
       <div class="section-title">Tuning</div>
       <div class="slider-row">
         <label>Rate window (s)</label>
-        <div class="slider-track"><div class="slider-fill" style="width:28%"></div><div class="slider-thumb" style="left:28%"></div></div>
+        <div class="slider-track" data-value="90"><div class="slider-thumb" style="left:25%"></div></div>
       </div>
       <div class="slider-row">
         <label>Start grace (s)</label>
-        <div class="slider-track"><div class="slider-fill" style="width:22%"></div><div class="slider-thumb" style="left:22%"></div></div>
+        <div class="slider-track" data-value="20"><div class="slider-thumb" style="left:22%"></div></div>
       </div>
       <div class="slider-row">
         <label>Surge rate /min</label>
-        <div class="slider-track"><div class="slider-fill" style="width:17%"></div><div class="slider-thumb" style="left:17%"></div></div>
+        <div class="slider-track" data-value="60"><div class="slider-thumb" style="left:17%"></div></div>
       </div>
       <div class="slider-row">
         <label>Win margin</label>
-        <div class="slider-track"><div class="slider-fill" style="width:21%"></div><div class="slider-thumb" style="left:21%"></div></div>
+        <div class="slider-track" data-value="150"><div class="slider-thumb" style="left:22%"></div></div>
       </div>
       <div class="slider-row">
         <label>Lead cooldown (s)</label>
-        <div class="slider-track"><div class="slider-fill" style="width:17%"></div><div class="slider-thumb" style="left:17%"></div></div>
+        <div class="slider-track" data-value="20"><div class="slider-thumb" style="left:17%"></div></div>
       </div>
       <div class="slider-row">
         <label>Threat cooldown (s)</label>
-        <div class="slider-track"><div class="slider-fill" style="width:17%"></div><div class="slider-thumb" style="left:17%"></div></div>
+        <div class="slider-track" data-value="30"><div class="slider-thumb" style="left:17%"></div></div>
       </div>
       <div class="separator"></div>
       <div class="dim" style="font-size:12px;">/fla on | off | team | map | dump | test. Frontline Advisor reads the game's own score board; it hooks nothing and writes nothing back.</div>

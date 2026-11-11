@@ -121,7 +121,8 @@ public static class Advisor
     /// <summary>"45s" or "1m30s" - a rate estimate never deserves false precision.</summary>
     public static string FormatMinutes(double minutes)
     {
-        if (double.IsNaN(minutes) || double.IsInfinity(minutes) || minutes < 0) return "a while";
+        // The upper bound keeps minutes * 60 inside int; beyond it the cast saturates to a bogus figure.
+        if (double.IsNaN(minutes) || minutes < 0 || minutes >= int.MaxValue / 60.0) return "a while";
         var totalSeconds = (int)Math.Round(minutes * 60);
         if (totalSeconds < 60) return $"{totalSeconds}s";
         var m = totalSeconds / 60;

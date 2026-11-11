@@ -191,6 +191,10 @@ internal static class Program
             Equal(Advisor.FormatMinutes(0.5), "30s", "format under a minute");
             Equal(Advisor.FormatMinutes(2.0), "2m", "format whole minutes");
             Equal(Advisor.FormatMinutes(2.5), "2m30s", "format minutes and seconds");
+            Equal(Advisor.FormatMinutes(double.NaN), "a while", "NaN formats as a while");
+            Equal(Advisor.FormatMinutes(-1), "a while", "negative formats as a while");
+            // A near-equal rate pair gives an astronomically large overtake ETA; it must not overflow the seconds.
+            Equal(Advisor.FormatMinutes(1e12), "a while", "overflowing ETA formats as a while");
         }
 
         internal static void TrackerSection()

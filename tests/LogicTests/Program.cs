@@ -97,6 +97,10 @@ internal static class Program
             Equal(MapCatalog.Resolve(127, "Shatter")?.Campaign, "Shatter", "override picks the map inside Frontline");
             Equal(MapCatalog.Resolve(127, "auto")?.Campaign, "Secure", "auto uses the live duty");
             Equal(MapCatalog.Resolve(130, "garuda")?.Campaign, "Seize", "unknown override falls back to the live duty");
+            Equal(MapCatalog.ByName(" 701 ")?.Campaign, "Danshig Naadam", "numeric duty id override");
+            Equal(MapCatalog.Resolve(127, "1080")?.Campaign, "Triumph", "numeric override picks the map inside Frontline");
+            Equal(MapCatalog.Resolve(0, "1080"), null, "numeric override cannot open the gate outside Frontline");
+            Equal(MapCatalog.ByName("4242"), null, "unknown numeric id is not a map");
         }
 
         internal static void TeamsSection()
@@ -107,6 +111,9 @@ internal static class Program
             Check(Teams.TryParse("Twin Adder", out var t2) && t2 == GrandCompanyTeam.TwinAdder, "parse twin adder");
             Check(Teams.TryParse("flames", out var t3) && t3 == GrandCompanyTeam.ImmortalFlames, "parse flames");
             Check(!Teams.TryParse("garuda", out _), "reject nonsense");
+            Check(Teams.TryParse(" Immortal-Flames ", out var t4) && t4 == GrandCompanyTeam.ImmortalFlames, "parse ignores case, spaces and hyphens");
+            Check(Teams.TryParse("yellow", out var t5) && t5 == GrandCompanyTeam.TwinAdder, "parse a map colour");
+            Check(!Teams.TryParse(null, out _) && !Teams.TryParse("  ", out _), "reject null and blank");
             Equal(GrandCompanyTeam.TwinAdder.Name(), "Twin Adder", "display name");
         }
 
@@ -162,6 +169,16 @@ internal static class Program
             var sparse = new List<ScoreSample>(oldRamp) { At(200, 220, 100, 100) };
             var thin = Analyzer.SlopePerMinute(sparse, GrandCompanyTeam.Maelstrom, Base.AddSeconds(200), 30);
             Equal(thin, 0.0, "slope is 0 when the trailing window has fewer than two samples");
+
+            var shortSpan = new List<ScoreSample> { At(0, 0, 0, 0), At(5, 100, 0, 0) };
+            Equal(Analyzer.SlopePerMinute(shortSpan, GrandCompanyTeam.Maelstrom, Base.AddSeconds(5), 90), 0.0, "slope is 0 when the window spans under 8s");
+
+            // Shared ranks: a tie for 2nd ranks both 2nd, and the slower team never gets an overtake ETA.
+            var shared = new List<ScoreSample> { At(0, 300, 200, 200), At(60, 300, 200, 200) };
+            var sh = Analyzer.Analyze(shared[^1], shared, MapCatalog.ByName("Secure"), 90);
+            Equal(sh.Rank(GrandCompanyTeam.TwinAdder), 2, "tie for 2nd: Twin Adder ranks 2nd");
+            Equal(sh.Rank(GrandCompanyTeam.ImmortalFlames), 2, "tie for 2nd: Immortal Flames ranks 2nd");
+            Check(a.EtaCatchLeaderMinutes[GrandCompanyTeam.TwinAdder] is null, "no overtake ETA for a team not outscoring the leader");
         }
 
         internal static void AdvisorSection()
@@ -192,6 +209,11 @@ internal static class Program
             Equal(Advisor.FormatMinutes(2.0), "2m", "format whole minutes");
             Equal(Advisor.FormatMinutes(2.5), "2m30s", "format minutes and seconds");
             Equal(Advisor.FormatMinutes(double.NaN), "a while", "NaN formats as a while");
+            Equal(Advisor.FormatMinutes(double.PositiveInfinity), "a while", "infinity formats as a while");
+            var tiedTop = new List<ScoreSample> { At(0, 300, 300, 100), At(60, 300, 300, 100) };
+            var tb = Advisor.Build(Analyzer.Analyze(tiedTop[^1], tiedTop, MapCatalog.ByName("Secure"), 90), GrandCompanyTeam.Maelstrom);
+            Contains(tb.Headline, "Tied at the top", "tied headline");
+            Equal(tb.FocusTitle, "FOCUS", "no named focus on a tied lead");
             Equal(Advisor.FormatMinutes(-1), "a while", "negative formats as a while");
             // A near-equal rate pair gives an astronomically large overtake ETA; it must not overflow the seconds.
             Equal(Advisor.FormatMinutes(1e12), "a while", "overflowing ETA formats as a while");
@@ -290,6 +312,44 @@ internal static class Program
             tracker7.ClearLatest();
             Check(tracker7.Latest is null, "ClearLatest drops Latest");
             Check(tracker7.SampleCount >= 2, "ClearLatest keeps history");
+
+            // Win-close is said once per team per match, not every poll.
+            notices = new List<Notice>();
+            for (var t = 30; t <= 90; t += 3)
+                notices.AddRange(tracker5.Observe(At(t, 2300, 100, 50), map, settings));
+            Check(!notices.Any(n => n.Kind == NoticeKind.WinImminent), "win-close does not repeat");
+
+            // A baseline tie then a leader reads "up from a tie"; FirstLead never fired, so the lead change carries it.
+            var trackerBaseTie = new MatchTracker();
+            notices = new List<Notice>();
+            notices.AddRange(trackerBaseTie.Observe(At(0, 100, 100, 10), map, settings));
+            notices.AddRange(trackerBaseTie.Observe(At(25, 100, 100, 10), map, settings)); // baseline: tie
+            Check(!notices.Any(), "a tied baseline announces nothing");
+            notices.AddRange(trackerBaseTie.Observe(At(30, 150, 100, 10), map, settings));
+            var fromTie = notices.FirstOrDefault(n => n.Kind == NoticeKind.LeadChange);
+            Contains(fromTie?.Message ?? string.Empty, "up from a tie", "first leader after a tied baseline");
+
+            // A disabled announcement stays silent.
+            var quiet = settings with { AnnounceLeadChange = false };
+            var trackerQuiet = new MatchTracker();
+            notices = new List<Notice>();
+            notices.AddRange(trackerQuiet.Observe(At(0, 100, 50, 10), map, quiet));
+            notices.AddRange(trackerQuiet.Observe(At(25, 100, 50, 10), map, quiet));
+            notices.AddRange(trackerQuiet.Observe(At(30, 100, 200, 10), map, quiet));
+            Check(!notices.Any(n => n.Kind == NoticeKind.LeadChange), "lead change off means no lead change notice");
+
+            // The leader scoring fastest is not an emerging threat.
+            var trackerRun = new MatchTracker();
+            notices = new List<Notice>();
+            for (var t = 0.0; t <= 200; t += 3)
+                notices.AddRange(trackerRun.Observe(At(t, 100 + (int)(t * 2), 50, 10), map, settings));
+            Check(!notices.Any(n => n.Kind == NoticeKind.EmergingThreat), "a runaway leader is not called a threat");
+
+            // History is bounded to the retention window (600 s at the default rate window).
+            var trackerLong = new MatchTracker();
+            for (var t = 0; t <= 1800; t += 1)
+                trackerLong.Observe(At(t, t, 0, 0), map, settings);
+            Check(trackerLong.SampleCount <= 601, $"history stays bounded (got {trackerLong.SampleCount})");
         }
 
         internal static void FullMatch()

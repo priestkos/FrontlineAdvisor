@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Dalamud.Game.Command;
 using Dalamud.Game.Gui.Dtr;
 using Dalamud.Game.Text.SeStringHandling;

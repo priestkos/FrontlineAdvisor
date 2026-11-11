@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace FrontlineAdvisor.Core;
@@ -129,6 +128,4 @@ public static class Advisor
         var s = totalSeconds % 60;
         return s == 0 ? $"{m}m" : $"{m}m{s}s";
     }
-
-    public static string FormatGap(int gap) => gap <= 0 ? "level" : $"-{gap.ToString("N0", CultureInfo.InvariantCulture)}";
 }

@@ -59,10 +59,6 @@ public sealed class MatchTracker
 
     public MatchAnalysis? Latest { get; private set; }
 
-    public DateTime StartUtc => startUtc;
-
-    public bool Running => history.Count > 0;
-
     public int SampleCount => history.Count;
 
     /// <summary>Called when a match is joined (or re-joined).</summary>

@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
 using FFXIVClientStructs.FFXIV.Client.Game.InstanceContent;
+using FrontlineAdvisor.Core;
 
 namespace FrontlineAdvisor;
 
@@ -78,6 +79,10 @@ internal static unsafe class FrontlineReader
 
         if (director == 0)
             return DirectorSnapshot.Unavailable(dutyId, timeMax, "no instance-content director");
+
+        // The score offsets are only valid in a Frontline director; gate here too so no caller can bypass it.
+        if (MapCatalog.ByDutyId(dutyId) is null)
+            return DirectorSnapshot.Unavailable(dutyId, timeMax, "not a Frontline duty");
 
         var scores = (FrontlineScores*)director;
         var mael = scores->Maelstrom;

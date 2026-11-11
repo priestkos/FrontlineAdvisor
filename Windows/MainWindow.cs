@@ -22,6 +22,11 @@ public sealed class MainWindow : Window, IDisposable
 
     private readonly Plugin plugin;
 
+    // Advisor.Build is pure; rebuild only when the tracker publishes a new analysis or the team changes.
+    private MatchAnalysis? briefingFor;
+    private GrandCompanyTeam? briefingTeam;
+    private Briefing? briefing;
+
     public MainWindow(Plugin plugin)
         : base("Frontline Advisor###FrontlineAdvisorMain")
     {
@@ -47,7 +52,13 @@ public sealed class MainWindow : Window, IDisposable
 
         var map = plugin.ActiveMap;
         var analysis = plugin.Tracker.Latest;
-        var briefing = Advisor.Build(analysis, plugin.LocalTeam);
+        var team = plugin.LocalTeam;
+        if (briefing is null || !ReferenceEquals(briefingFor, analysis) || briefingTeam != team)
+        {
+            briefing = Advisor.Build(analysis, team);
+            briefingFor = analysis;
+            briefingTeam = team;
+        }
 
         ImGui.Spacing();
         using (ImRaii.PushColor(ImGuiCol.Text, TextDim))

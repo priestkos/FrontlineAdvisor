@@ -14,6 +14,9 @@ public sealed class ConfigWindow : Window, IDisposable
     private static readonly Vector4 TextDim = new(0.62f, 0.66f, 0.78f, 1f);
     private static readonly Vector4 Accent = new(0.98f, 0.80f, 0.28f, 1f);
 
+    private static readonly string[] TeamOptions = ["auto", "maelstrom", "twin adder", "immortal flames"];
+    private static readonly string[] MapOptions = ["auto", "Secure", "Seize", "Shatter", "Danshig Naadam", "Triumph"];
+
     private readonly Plugin plugin;
 
     public ConfigWindow(Plugin plugin)
@@ -103,7 +106,6 @@ public sealed class ConfigWindow : Window, IDisposable
 
     private static bool TeamCombo(Configuration config)
     {
-        var options = new[] { "auto", "maelstrom", "twin adder", "immortal flames" };
         var preview = string.Equals(config.LocalTeam, "auto", StringComparison.OrdinalIgnoreCase)
             ? "auto (unknown)"
             : config.ResolveLocalTeam()?.Name() ?? "auto (unknown)";
@@ -112,7 +114,7 @@ public sealed class ConfigWindow : Window, IDisposable
         var changed = false;
         if (ImGui.BeginCombo("##fa_team", preview))
         {
-            foreach (var option in options)
+            foreach (var option in TeamOptions)
             {
                 var selected = string.Equals(config.LocalTeam, option, StringComparison.OrdinalIgnoreCase);
                 if (ImGui.Selectable(option, selected))
@@ -132,7 +134,6 @@ public sealed class ConfigWindow : Window, IDisposable
 
     private static bool MapCombo(Configuration config)
     {
-        var options = new[] { "auto", "Secure", "Seize", "Shatter", "Danshig Naadam", "Triumph" };
         var preview = string.Equals(config.MapOverride, "auto", StringComparison.OrdinalIgnoreCase)
             ? "auto"
             : MapCatalog.ByName(config.MapOverride)?.Display ?? config.MapOverride;
@@ -141,7 +142,7 @@ public sealed class ConfigWindow : Window, IDisposable
         var changed = false;
         if (ImGui.BeginCombo("##fa_map", preview))
         {
-            foreach (var option in options)
+            foreach (var option in MapOptions)
             {
                 var selected = string.Equals(config.MapOverride, option, StringComparison.OrdinalIgnoreCase);
                 if (ImGui.Selectable(option, selected))
